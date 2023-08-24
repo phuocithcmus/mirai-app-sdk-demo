@@ -1,12 +1,12 @@
 import { Concert_One, Inter } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import {
 //   MiraiConnection,
 //   MiraiSignCore,
 //   MiraiSignProvider,
 //   MiraiWindow,
 // } from "@mirailabs-co/miraiid-js";
-import { io, connect } from "socket.io-client";
+import { io, connect, Socket } from "socket.io-client";
 import parser from "socket.io-msgpack-parser";
 import QRCode from "qrcode";
 import axios from "axios";
@@ -38,78 +38,73 @@ export default function Home() {
   const [method, setMethod] = useState<string>("");
   const [params, setParams] = useState<string>("");
 
-  console.log("here");
-  const socket = io("https://dev-sign-provider.miraiid.io", {
-    autoConnect: false,
-    reconnection: false,
-    // transportOptions: {
-    //   websocket: {
-    //     extraHeaders: {
-    //       authorization:
-    //         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhMGJhYzYwNC0wZmE0LTQ0N2EtYTNkZS00ZGVmZjAyMDA4YzQiLCJqdGkiOiIyYzQyZmQzZC04M2FkLTQzZTEtOWE4NS00NjRlZjRlNzhkYjkiLCJleHAiOjE2OTI5NDYxNTcsInN1YiI6ImJmYjRmZmY2LWUzMTQtNDI2OS1iYTAyLWRmYzU5MTk1MzRjZiIsInNjb3BlcyI6WyJvcGVuaWQiLCJlbWFpbCIsIm9mZmxpbmVfYWNjZXNzIiwicHJvZmlsZSJdLCJlbWFpbCI6ImR1Y3BodW9jLnQ5QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiUGjGsOG7m2MgTmd1eeG7hW4gxJDhu6ljIiwiZ2l2ZW5fbmFtZSI6IlBoxrDhu5tjIiwiZmFtaWx5X25hbWUiOiJOZ3V54buFbiDEkOG7qWMiLCJpc3MiOiJodHRwczovL2lkLWRldi12Mi5taXJhaWxhYnMuY28iLCJhenAiOiJhMGJhYzYwNC0wZmE0LTQ0N2EtYTNkZS00ZGVmZjAyMDA4YzQiLCJpYXQiOjE2OTI4NTk3NTd9.CoeBHfbUk3hC9PGz4c51dOojXptKR78OsfcSEoQY6PVulcEE8tjxDEOqMtlDU6-eyKDTg9qiQRNxtXf5iHVFeNbZ9E32JdyFsDiwSGjaD1HRpzq7Xm8QkA9SPFO0QQP6BSNgHIgg4fYNrii0t-0r7wojg_sfgjDDyCX_vmZY4TYCIjr9TS9vrELupcW716Y_seiGr6WQfy6HyfTbVSGRb4yviNcOMjDeORht2JuJajLsrMSQsYGXcx_V04uXrcC1SY0xi7LnsVQfQSWyKTf6xoTix6cm3gnzbyZYZJrPqDJtDu2FRxBLNLR53NNc8v3UjaJREjdcNgvvLGarw_HY61Azsqh5LaE_KZuZeBxtBBVjlN209N7hRNPrKv_RbnTnIBvoGjv0zjlN4r42_DPGWojnaqkuConrY2W7daQHHPMdf7XnnlfPL7g3osyO_8TMFLVjdxBEr1cPe6YZERvMMiVbDYg3fEps4dsjabJE4CkaTDt5j1CI8EjiMjhPnrbeq2htd4RsqjDI7enK0l4HAvy-kZJcPNXY6JRgq2R0C_Qh1gSSu8nd_RuutKDmEQ-r_uf6j5KsF-jTRs8qRgPEeO3DLgtDjSl2TLTWXEA8kaSy6Gj41rCyHO5pwPCdK2ySqe1oKIltCwLDAk4MfA83-yPVmeS3B6LZl79yCvpTczE",
-    //     },
-    //   },
-    // },
-    // extraHeaders: {
-    //   authorization:
-    //     "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhMGJhYzYwNC0wZmE0LTQ0N2EtYTNkZS00ZGVmZjAyMDA4YzQiLCJqdGkiOiIyYzQyZmQzZC04M2FkLTQzZTEtOWE4NS00NjRlZjRlNzhkYjkiLCJleHAiOjE2OTI5NDYxNTcsInN1YiI6ImJmYjRmZmY2LWUzMTQtNDI2OS1iYTAyLWRmYzU5MTk1MzRjZiIsInNjb3BlcyI6WyJvcGVuaWQiLCJlbWFpbCIsIm9mZmxpbmVfYWNjZXNzIiwicHJvZmlsZSJdLCJlbWFpbCI6ImR1Y3BodW9jLnQ5QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiUGjGsOG7m2MgTmd1eeG7hW4gxJDhu6ljIiwiZ2l2ZW5fbmFtZSI6IlBoxrDhu5tjIiwiZmFtaWx5X25hbWUiOiJOZ3V54buFbiDEkOG7qWMiLCJpc3MiOiJodHRwczovL2lkLWRldi12Mi5taXJhaWxhYnMuY28iLCJhenAiOiJhMGJhYzYwNC0wZmE0LTQ0N2EtYTNkZS00ZGVmZjAyMDA4YzQiLCJpYXQiOjE2OTI4NTk3NTd9.CoeBHfbUk3hC9PGz4c51dOojXptKR78OsfcSEoQY6PVulcEE8tjxDEOqMtlDU6-eyKDTg9qiQRNxtXf5iHVFeNbZ9E32JdyFsDiwSGjaD1HRpzq7Xm8QkA9SPFO0QQP6BSNgHIgg4fYNrii0t-0r7wojg_sfgjDDyCX_vmZY4TYCIjr9TS9vrELupcW716Y_seiGr6WQfy6HyfTbVSGRb4yviNcOMjDeORht2JuJajLsrMSQsYGXcx_V04uXrcC1SY0xi7LnsVQfQSWyKTf6xoTix6cm3gnzbyZYZJrPqDJtDu2FRxBLNLR53NNc8v3UjaJREjdcNgvvLGarw_HY61Azsqh5LaE_KZuZeBxtBBVjlN209N7hRNPrKv_RbnTnIBvoGjv0zjlN4r42_DPGWojnaqkuConrY2W7daQHHPMdf7XnnlfPL7g3osyO_8TMFLVjdxBEr1cPe6YZERvMMiVbDYg3fEps4dsjabJE4CkaTDt5j1CI8EjiMjhPnrbeq2htd4RsqjDI7enK0l4HAvy-kZJcPNXY6JRgq2R0C_Qh1gSSu8nd_RuutKDmEQ-r_uf6j5KsF-jTRs8qRgPEeO3DLgtDjSl2TLTWXEA8kaSy6Gj41rCyHO5pwPCdK2ySqe1oKIltCwLDAk4MfA83-yPVmeS3B6LZl79yCvpTczE",
-    // },
-    transports: ["websocket"],
-    upgrade: true,
-    withCredentials: true,
-    auth: {
-      authorization: accessToken,
-    },
-  });
+  const ws = useRef<Socket>();
 
-  // socket.on(socket.id, (e) => {
-  //   console.log(e);
-  // });
+  useEffect(() => {
+    console.log("here");
+    const socket = io("https://dev-sign-provider.miraiid.io", {
+      autoConnect: false,
+      reconnection: false,
+      transports: ["websocket"],
+      upgrade: true,
+      withCredentials: true,
+      auth: {
+        authorization: accessToken,
+      },
+    });
 
-  socket.on("connect", () => {
-    console.log("connected");
-    setSocketId(`ws connected: id: ${socket.id}`);
+    // socket.on(socket.id, (e) => {
+    //   console.log(e);
+    // });
 
-    setQrCode("");
-    setUri("");
-    setTopicId("");
-    setMessage("");
-    setIsConnectting(false);
-  });
+    socket.on("connect", () => {
+      console.log("connected");
+      setSocketId(`ws connected: id: ${socket.id}`);
 
-  socket.on("disconnect", (reason) => {
-    console.log("disconnected", reason);
-    setIsConnectting(false);
-    setMessage(`ws disconnected: reason: ${reason}`);
-  });
+      setQrCode("");
+      setUri("");
+      setTopicId("");
+      setMessage("");
+      setIsConnectting(false);
+    });
 
-  socket.on("uri", async (uri) => {
-    console.log("uri", uri);
-    setUri(uri);
-    setQrCode(await QRCode.toDataURL(uri));
-  });
+    socket.on("disconnect", (reason) => {
+      console.log("disconnected", reason);
+      setIsConnectting(false);
 
-  socket.on("topic", (topic) => {
-    console.log("topic", topic);
-    setTopicId(topic);
-  });
+      setMessage(`ws disconnected: reason: ${reason}`);
+    });
 
-  socket.on("error-topic", (message) => {
-    console.log("error-topic", message);
-    setMessage(message);
-  });
+    socket.on("uri", async (uri) => {
+      console.log("uri", uri);
+      setUri(uri);
+      setQrCode(await QRCode.toDataURL(uri));
+    });
 
-  socket.on("error", (message) => {
-    console.log("error", message);
-    setMessage(message);
+    socket.on("topic", (topic) => {
+      console.log("topic", topic);
+      setTopicId(topic);
+    });
 
-    setIsConnectting(false);
-  });
+    socket.on("error-topic", (message) => {
+      console.log("error-topic", message);
+      setMessage(message);
+    });
 
-  socket.on("response", (response) => {
-    console.log("error", response);
-    setMessage(response);
-  });
+    socket.on("error", (message) => {
+      console.log("error", message);
+      setMessage(message);
+
+      setIsConnectting(false);
+    });
+
+    socket.on("response", (response) => {
+      console.log("error", response);
+      setMessage(response);
+    });
+
+    ws.current = socket;
+  }, []);
 
   // FOR SDK CLIENT
   // useEffect(() => {
@@ -314,7 +309,9 @@ export default function Home() {
             type="button"
             onClick={async () => {
               setIsConnectting(true);
-              socket.connect();
+              if (ws.current) {
+                ws.current.connect();
+              }
             }}
           >
             {isConnectting ? "Connectting" : "Connect"}
