@@ -82,7 +82,7 @@ export default function Home() {
 
     toast.success(`New URI received - uri: ${uri}`, {
       style: {
-        overflow: "hidden",
+        wordBreak: "break-all",
       },
     });
 
@@ -94,7 +94,7 @@ export default function Home() {
     console.log("topic", topic);
     toast.success(`New topic received - topic: ${topic}`, {
       style: {
-        overflow: "hidden",
+        wordBreak: "break-all",
       },
     });
 
@@ -104,7 +104,11 @@ export default function Home() {
   socket.on("error-topic", (message) => {
     console.log("error-topic", message);
 
-    toast.error(`error-topic - message: ${message}`);
+    toast.error(`error-topic - message: ${message}`, {
+      style: {
+        wordBreak: "break-all",
+      },
+    });
     setMessage(message);
   });
 
@@ -112,14 +116,22 @@ export default function Home() {
     console.log("error", message);
     setMessage(message);
 
-    toast.error(`error - message: ${message}`);
+    toast.error(`error - message: ${message}`, {
+      style: {
+        wordBreak: "break-all",
+      },
+    });
 
     setIsConnectting(false);
   });
 
   socket.on("response", (response) => {
     console.log("error", response);
-    toast(`Received message: ${response}`);
+    toast(`Received message: ${response}`, {
+      style: {
+        wordBreak: "break-all",
+      },
+    });
     setMessage(response);
   });
 
@@ -287,6 +299,7 @@ export default function Home() {
                 <p style={{ fontWeight: "bold" }}>Topic:</p> {topicId}
               </div>
               <input
+                value={chainId}
                 style={{ marginBottom: "20px" }}
                 type="text"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -296,6 +309,7 @@ export default function Home() {
                 }}
               />
               <input
+                value={method}
                 type="text"
                 style={{ marginBottom: "20px" }}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -305,6 +319,7 @@ export default function Home() {
                 }}
               />
               <textarea
+                value={params}
                 style={{ marginBottom: "20px" }}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Params"
