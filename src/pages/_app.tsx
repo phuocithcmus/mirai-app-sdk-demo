@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import "jsoneditor-react/es/editor.min.css";
 import type { AppProps } from "next/app";
 import toast, { Toaster } from "react-hot-toast";
 
