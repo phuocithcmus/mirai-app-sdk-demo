@@ -352,7 +352,7 @@ export default function Home() {
               setIsGetting(false);
             }}
           >
-            {isGettting ? "watting..." : "Get QRCode"}
+            {isGettting ? "watting..." : "Request"}
           </button>
         </>
         {/* {isConnectting ||
