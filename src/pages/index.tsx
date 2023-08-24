@@ -80,7 +80,11 @@ export default function Home() {
   socket.on("uri", async (uri) => {
     console.log("uri", uri);
 
-    toast.success(`New URI received - uri: ${uri}`);
+    toast.success(`New URI received - uri: ${uri}`, {
+      style: {
+        overflow: "hidden",
+      },
+    });
 
     setUri(uri);
     setQrCode(await QRCode.toDataURL(uri));
@@ -88,6 +92,12 @@ export default function Home() {
 
   socket.on("topic", (topic) => {
     console.log("topic", topic);
+    toast.success(`New topic received - topic: ${topic}`, {
+      style: {
+        overflow: "hidden",
+      },
+    });
+
     setTopicId(topic);
   });
 
