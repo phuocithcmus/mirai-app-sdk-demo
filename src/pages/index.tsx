@@ -261,7 +261,7 @@ export default function Home() {
   useEffect(() => {
     if (status === "approved") {
       toastSuccess("User approved session");
-    } else {
+    } else if (status === "rejected") {
       toastError("User rejected session");
     }
   }, [status]);
