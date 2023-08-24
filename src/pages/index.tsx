@@ -1,11 +1,11 @@
 import { Concert_One, Inter } from "next/font/google";
 import { useEffect, useState } from "react";
-import {
-  MiraiConnection,
-  MiraiSignCore,
-  MiraiSignProvider,
-  MiraiWindow,
-} from "@mirailabs-co/miraiid-js";
+// import {
+//   MiraiConnection,
+//   MiraiSignCore,
+//   MiraiSignProvider,
+//   MiraiWindow,
+// } from "@mirailabs-co/miraiid-js";
 import { io, connect } from "socket.io-client";
 import parser from "socket.io-msgpack-parser";
 import QRCode from "qrcode";
@@ -22,10 +22,10 @@ export default function Home() {
   const [wallet_client, setWalletClient] = useState<any>(null);
   const [onSigning, setOnSigning] = useState<boolean>(false);
   const [topicId, setTopicId] = useState<string>("");
-  const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
-  const [miraiCore, setMiraiCore] = useState<MiraiSignCore | null>(null);
-  const [miraiConnection, setMiraiConnection] =
-    useState<MiraiConnection | null>(null);
+  // const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
+  // const [miraiCore, setMiraiCore] = useState<MiraiSignCore | null>(null);
+  // const [miraiConnection, setMiraiConnection] =
+  //   useState<MiraiConnection | null>(null);
   const [showSignArea, setShowSignArea] = useState<boolean>(false);
   const [isConnectting, setIsConnectting] = useState<boolean>(false);
   const [qrcode, setQrCode] = useState<string>("");
@@ -222,47 +222,45 @@ export default function Home() {
         </div>
       </div>
       <div className="relative flex place-items-center ">
-        {!miraiConnection && (
-          <>
-            <button
-              disabled={isConnectting}
-              data-modal-target="defaultModal"
-              data-modal-toggle="defaultModal"
-              className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="button"
-              onClick={async () => {
-                socket.connect();
-              }}
-            >
-              Connect
-            </button>
-            <button
-              disabled={isConnectting}
-              data-modal-target="defaultModal"
-              data-modal-toggle="defaultModal"
-              className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="button"
-              style={{ marginLeft: "10px" }}
-              onClick={async () => {
-                setIsConnectting(true);
+        <>
+          <button
+            disabled={isConnectting}
+            data-modal-target="defaultModal"
+            data-modal-toggle="defaultModal"
+            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            onClick={async () => {
+              socket.connect();
+            }}
+          >
+            Connect
+          </button>
+          <button
+            disabled={isConnectting}
+            data-modal-target="defaultModal"
+            data-modal-toggle="defaultModal"
+            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            style={{ marginLeft: "10px" }}
+            onClick={async () => {
+              setIsConnectting(true);
 
-                await getTopic();
+              await getTopic();
 
-                setIsConnectting(false);
-              }}
-            >
-              Get Topic
-            </button>
-          </>
-        )}
-        {isConnectting ||
+              setIsConnectting(false);
+            }}
+          >
+            Get Topic
+          </button>
+        </>
+        {/* {isConnectting ||
           (miraiConnection && (
             <button className="block text-white bg-green-700  hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
               {isConnectting
                 ? `Connectting`
                 : `${status === null ? "Connected" : status.toUpperCase()}`}
             </button>
-          ))}
+          ))} */}
       </div>
     </main>
   );
