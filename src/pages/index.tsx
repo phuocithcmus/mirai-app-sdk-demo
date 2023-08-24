@@ -253,7 +253,6 @@ export default function Home() {
         miraiCore?.on("disconnected", (reason) => {
           toastError(reason);
         });
-        await showModal();
       }
     })();
   }, [miraiConnection]);
