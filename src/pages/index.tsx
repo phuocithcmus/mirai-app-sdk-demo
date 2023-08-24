@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [account, setAccount] = useState<string | null>(null);
-  const [chainId, setChainId] = useState<string | null>(null);
+
   const [message, setMessage] = useState<string>("");
   const [message_unsigned, setMessageUnsigned] = useState<string>("");
   const [status, setStatus] = useState<"approved" | "rejected" | null>(null);
@@ -34,6 +34,9 @@ export default function Home() {
   const [socketId, setSocketId] = useState<string>("");
 
   const [accessToken, setAccessToken] = useState<string>("");
+  const [chainId, setChainId] = useState<string>("");
+  const [method, setMethod] = useState<string>("");
+  const [params, setParams] = useState<string>("");
 
   console.log("here");
   const socket = io("https://dev-sign-provider.miraiid.io", {
@@ -200,6 +203,36 @@ export default function Home() {
     } catch (e) {}
   };
 
+  const request = async (
+    topicId: string,
+    chainId: string,
+    method: string,
+    params: string
+  ) => {
+    try {
+      const topic = await axios.post(
+        `https://dev-sign-provider.miraiid.io/api/provider/${topicId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+        {
+          method: "PUT",
+          data: {
+            chainId: `eip155:${chainId}`,
+            request: {
+              method,
+              params: JSON.parse(params),
+            },
+          },
+        }
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -237,12 +270,41 @@ export default function Home() {
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>{uri}</p>
 
           {topicId && (
-            <p
-              style={{ marginTop: "20px" }}
-              className={`m-0 max-w-[30ch] text-sm opacity-50`}
-            >
-              <p style={{ fontWeight: "bold" }}>Topic:</p> {topicId}
-            </p>
+            <>
+              <div
+                style={{ marginTop: "20px", marginBottom: "20px" }}
+                className={`m-0 max-w-[30ch] text-sm opacity-50`}
+              >
+                <p style={{ fontWeight: "bold" }}>Topic:</p> {topicId}
+              </div>
+              <input
+                style={{ marginBottom: "20px" }}
+                type="text"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="ChainId"
+                onChange={(evt) => {
+                  setChainId(evt.target.value);
+                }}
+              />
+              <input
+                type="text"
+                style={{ marginBottom: "20px" }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Method"
+                onChange={(evt) => {
+                  setMethod(evt.target.value);
+                }}
+              />
+              <input
+                style={{ marginBottom: "20px" }}
+                type="text"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Params"
+                onChange={(evt) => {
+                  setParams(evt.target.value);
+                }}
+              />
+            </>
           )}
         </div>
       </div>
@@ -270,6 +332,22 @@ export default function Home() {
               setIsGetting(true);
 
               await getTopic();
+
+              setIsGetting(false);
+            }}
+          >
+            {isGettting ? "watting..." : "Get QRCode"}
+          </button>
+          <button
+            data-modal-target="defaultModal"
+            data-modal-toggle="defaultModal"
+            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            style={{ marginLeft: "10px" }}
+            onClick={async () => {
+              setIsGetting(true);
+
+              await request(topicId, chainId, method, params);
 
               setIsGetting(false);
             }}
