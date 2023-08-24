@@ -10,6 +10,7 @@ import { io, connect, Socket } from "socket.io-client";
 import parser from "socket.io-msgpack-parser";
 import QRCode from "qrcode";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,9 +35,11 @@ export default function Home() {
   const [socketId, setSocketId] = useState<string>("");
 
   const [accessToken, setAccessToken] = useState<string>("");
-  const [chainId, setChainId] = useState<string>("");
-  const [method, setMethod] = useState<string>("");
-  const [params, setParams] = useState<string>("");
+  const [chainId, setChainId] = useState<string>("56");
+  const [method, setMethod] = useState<string>("personal_sign");
+  const [params, setParams] = useState<string>(
+    '["phuocnd","0x9f3A5240980a94F6CE5f30c6187d047F6650B9a9"]'
+  );
 
   const socket = io("https://dev-sign-provider.miraiid.io", {
     autoConnect: false,
@@ -96,6 +99,7 @@ export default function Home() {
 
   socket.on("response", (response) => {
     console.log("error", response);
+    toast(`Received message: ${response}`);
     setMessage(response);
   });
 
@@ -280,14 +284,14 @@ export default function Home() {
                   setMethod(evt.target.value);
                 }}
               />
-              <input
+              <textarea
                 style={{ marginBottom: "20px" }}
-                type="text"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Params"
                 onChange={(evt) => {
                   setParams(evt.target.value);
                 }}
+                rows={10}
               />
             </>
           )}
