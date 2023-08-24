@@ -38,73 +38,66 @@ export default function Home() {
   const [method, setMethod] = useState<string>("");
   const [params, setParams] = useState<string>("");
 
-  const ws = useRef<Socket>();
+  const socket = io("https://dev-sign-provider.miraiid.io", {
+    autoConnect: false,
+    reconnection: false,
+    transports: ["websocket"],
+    upgrade: true,
+    withCredentials: true,
+    auth: {
+      authorization: accessToken,
+    },
+  });
 
-  useEffect(() => {
-    console.log("here");
-    const socket = io("https://dev-sign-provider.miraiid.io", {
-      autoConnect: false,
-      reconnection: false,
-      transports: ["websocket"],
-      upgrade: true,
-      withCredentials: true,
-      auth: {
-        authorization: accessToken,
-      },
-    });
+  // socket.on(socket.id, (e) => {
+  //   console.log(e);
+  // });
 
-    // socket.on(socket.id, (e) => {
-    //   console.log(e);
-    // });
+  socket.on("connect", () => {
+    console.log("connected");
+    setSocketId(`ws connected: id: ${socket.id}`);
 
-    socket.on("connect", () => {
-      console.log("connected");
-      setSocketId(`ws connected: id: ${socket.id}`);
+    setQrCode("");
+    setUri("");
+    setTopicId("");
+    setMessage("");
+    setIsConnectting(false);
+  });
 
-      setQrCode("");
-      setUri("");
-      setTopicId("");
-      setMessage("");
-      setIsConnectting(false);
-    });
+  socket.on("disconnect", (reason) => {
+    console.log("disconnected", reason);
+    setIsConnectting(false);
 
-    socket.on("disconnect", (reason) => {
-      console.log("disconnected", reason);
-      setIsConnectting(false);
+    setMessage(`ws disconnected: reason: ${reason}`);
+  });
 
-      setMessage(`ws disconnected: reason: ${reason}`);
-    });
+  socket.on("uri", async (uri) => {
+    console.log("uri", uri);
+    setUri(uri);
+    setQrCode(await QRCode.toDataURL(uri));
+  });
 
-    socket.on("uri", async (uri) => {
-      console.log("uri", uri);
-      setUri(uri);
-      setQrCode(await QRCode.toDataURL(uri));
-    });
+  socket.on("topic", (topic) => {
+    console.log("topic", topic);
+    setTopicId(topic);
+  });
 
-    socket.on("topic", (topic) => {
-      console.log("topic", topic);
-      setTopicId(topic);
-    });
+  socket.on("error-topic", (message) => {
+    console.log("error-topic", message);
+    setMessage(message);
+  });
 
-    socket.on("error-topic", (message) => {
-      console.log("error-topic", message);
-      setMessage(message);
-    });
+  socket.on("error", (message) => {
+    console.log("error", message);
+    setMessage(message);
 
-    socket.on("error", (message) => {
-      console.log("error", message);
-      setMessage(message);
+    setIsConnectting(false);
+  });
 
-      setIsConnectting(false);
-    });
-
-    socket.on("response", (response) => {
-      console.log("error", response);
-      setMessage(response);
-    });
-
-    ws.current = socket;
-  }, []);
+  socket.on("response", (response) => {
+    console.log("error", response);
+    setMessage(response);
+  });
 
   // FOR SDK CLIENT
   // useEffect(() => {
@@ -309,9 +302,7 @@ export default function Home() {
             type="button"
             onClick={async () => {
               setIsConnectting(true);
-              if (ws.current) {
-                ws.current.connect();
-              }
+              socket.connect();
             }}
           >
             {isConnectting ? "Connectting" : "Connect"}
