@@ -341,13 +341,17 @@ export default function Home() {
         <div>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>{uri}</p>
 
-          {topicId && (
+          {(topicId || status === "approved") && (
             <>
               <div
                 style={{ marginTop: "20px", marginBottom: "20px" }}
                 className={`m-0 max-w-[30ch] text-sm opacity-50`}
               >
-                <p style={{ fontWeight: "bold" }}>Topic:</p> {topicId}
+                {topicId && (
+                  <>
+                    <p style={{ fontWeight: "bold" }}>Topic:</p> {topicId}
+                  </>
+                )}
               </div>
               <input
                 value={chainId}
@@ -447,6 +451,7 @@ export default function Home() {
                   });
 
                   if (connection) {
+                    toastSuccess("Initialized Mirai Connection");
                     setMiraiConnection(connection);
                   }
                 } else {
@@ -488,61 +493,29 @@ export default function Home() {
         )}
 
         {status === "approved" && (
-          <>
-            <input
-              value={chainId}
-              style={{ marginBottom: "20px" }}
-              type="text"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="ChainId"
-              onChange={(evt) => {
-                setChainId(evt.target.value);
-              }}
-            />
-            <input
-              value={method}
-              type="text"
-              style={{ marginBottom: "20px" }}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Method"
-              onChange={(evt) => {
-                setMethod(evt.target.value as RpcMethod);
-              }}
-            />
-            <textarea
-              value={params}
-              style={{ marginBottom: "20px" }}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Params"
-              onChange={(evt) => {
-                setParams(evt.target.value);
-              }}
-              rows={10}
-            />
-            <button
-              data-modal-target="defaultModal"
-              data-modal-toggle="defaultModal"
-              className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="button"
-              style={{ marginLeft: "10px" }}
-              onClick={async () => {
-                setIsLoadingModal(true);
+          <button
+            data-modal-target="defaultModal"
+            data-modal-toggle="defaultModal"
+            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            style={{ marginLeft: "10px" }}
+            onClick={async () => {
+              setIsLoadingModal(true);
 
-                try {
-                  await provider?.request({
-                    method: method as RpcMethod,
-                    params: JSON.parse(params),
-                  });
-                } catch (e) {
-                  toastError(e as string);
-                } finally {
-                  setIsLoadingModal(false);
-                }
-              }}
-            >
-              {isLoadingModal ? "watting..." : "Request"}
-            </button>
-          </>
+              try {
+                await provider?.request({
+                  method: method as RpcMethod,
+                  params: JSON.parse(params),
+                });
+              } catch (e) {
+                toastError(e as string);
+              } finally {
+                setIsLoadingModal(false);
+              }
+            }}
+          >
+            {isLoadingModal ? "watting..." : "Request"}
+          </button>
         )}
       </div>
     </main>
