@@ -210,7 +210,7 @@ export default function Home() {
     params: string
   ) => {
     try {
-      const topic = await axios.post(
+      const topic = await axios.put(
         `https://dev-sign-provider.miraiid.io/api/provider/send-request/${topicId}`,
         {
           chainId: `eip155:${chainId}`,
@@ -223,7 +223,6 @@ export default function Home() {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-          method: "PUT",
         }
       );
     } catch (e) {
