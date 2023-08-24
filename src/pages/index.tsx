@@ -30,6 +30,7 @@ export default function Home() {
   const [isConnectting, setIsConnectting] = useState<boolean>(false);
   const [qrcode, setQrCode] = useState<string>("");
   const [uri, setUri] = useState<string>("");
+  const [socketId, setSocketId] = useState<string>("");
 
   const [accessToken, setAccessToken] = useState<string>("");
 
@@ -63,7 +64,7 @@ export default function Home() {
 
   socket.on("connect", () => {
     console.log("connected");
-    setMessage(`ws connected: id: ${socket.id}`);
+    setSocketId(`ws connected: id: ${socket.id}`);
 
     setQrCode("");
     setUri("");
@@ -84,6 +85,21 @@ export default function Home() {
   socket.on("topic", (topic) => {
     console.log("topic", topic);
     setTopicId(topic);
+  });
+
+  socket.on("error-topic", (message) => {
+    console.log("error-topic", message);
+    setMessage(message);
+  });
+
+  socket.on("error", (message) => {
+    console.log("error", message);
+    setMessage(message);
+  });
+
+  socket.on("response", (response) => {
+    console.log("error", response);
+    setMessage(response);
   });
 
   // FOR SDK CLIENT
@@ -193,7 +209,8 @@ export default function Home() {
           setAccessToken(evt.target.value);
         }}
       />
-      <p>{message}</p>
+      <p>{socketId}</p>
+      <p>Message: {message}</p>
       <div></div>
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
         <a
