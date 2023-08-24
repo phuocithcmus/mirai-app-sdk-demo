@@ -11,8 +11,34 @@ import parser from "socket.io-msgpack-parser";
 import QRCode from "qrcode";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  MiraiConnection,
+  MiraiSignCore,
+  MiraiSignProvider,
+  MiraiWindow,
+} from "@mirailabs-co/miraiid-js";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export type RpcMethod =
+  | "personal_sign"
+  | "eth_sendTransaction"
+  | "eth_accounts"
+  | "eth_requestAccounts"
+  | "eth_call"
+  | "eth_getBalance"
+  | "eth_sendRawTransaction"
+  | "eth_sign"
+  | "eth_signTransaction"
+  | "eth_signTypedData"
+  | "eth_signTypedData_v3"
+  | "eth_signTypedData_v4"
+  | "wallet_switchEthereumChain"
+  // | 'wallet_addEthereumChain'
+  // | 'wallet_getPermissions'
+  // | 'wallet_requestPermissions'
+  // | 'wallet_registerOnboarding'
+  | "eth_chainId";
 
 export default function Home() {
   const [account, setAccount] = useState<string | null>(null);
@@ -23,20 +49,21 @@ export default function Home() {
   const [wallet_client, setWalletClient] = useState<any>(null);
   const [onSigning, setOnSigning] = useState<boolean>(false);
   const [topicId, setTopicId] = useState<string>("");
-  // const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
-  // const [miraiCore, setMiraiCore] = useState<MiraiSignCore | null>(null);
-  // const [miraiConnection, setMiraiConnection] =
-  //   useState<MiraiConnection | null>(null);
+  const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
+  const [miraiCore, setMiraiCore] = useState<MiraiSignCore | null>(null);
+  const [miraiConnection, setMiraiConnection] =
+    useState<MiraiConnection | null>(null);
   const [showSignArea, setShowSignArea] = useState<boolean>(false);
   const [isConnectting, setIsConnectting] = useState<boolean>(false);
   const [isGettting, setIsGetting] = useState<boolean>(false);
+  const [isLoadingModal, setIsLoadingModal] = useState<boolean>(false);
   const [qrcode, setQrCode] = useState<string>("");
   const [uri, setUri] = useState<string>("");
   const [socketId, setSocketId] = useState<string>("");
 
   const [accessToken, setAccessToken] = useState<string>("");
   const [chainId, setChainId] = useState<string>("56");
-  const [method, setMethod] = useState<string>("personal_sign");
+  const [method, setMethod] = useState<RpcMethod>("personal_sign");
   const [params, setParams] = useState<string>(
     '["phuocnd","0x9f3A5240980a94F6CE5f30c6187d047F6650B9a9"]'
   );
@@ -135,46 +162,66 @@ export default function Home() {
     setMessage(response);
   });
 
+  const toastSuccess = (msg: string) => {
+    toast.success(msg, {
+      style: {
+        wordBreak: "break-all",
+      },
+    });
+  };
+
+  const toastError = (msg: string) => {
+    toast.error(msg, {
+      style: {
+        wordBreak: "break-all",
+      },
+    });
+  };
+
   // FOR SDK CLIENT
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const miraiCore = await MiraiSignCore.init({
-  //         clientId: "a0bac604-0fa4-447a-a3de-4deff02008c4",
-  //         chainNameSpace: "eip155",
-  //         chains: ["0x38", "0x893"],
-  //         metaData: {
-  //           name: "Mirai App",
-  //           description: "Mirai App",
-  //           icons: [""],
-  //         },
-  //         onOpenConnectionModal: async (
-  //           connnection: MiraiConnection,
-  //           url: string
-  //         ) => {
-  //           console.log("url", new URL(url));
-  //           console.log("connnection", connnection);
+  useEffect(() => {
+    (async () => {
+      try {
+        const miraiCore = await MiraiSignCore.init({
+          clientId: "a0bac604-0fa4-447a-a3de-4deff02008c4",
+          chainNameSpace: "eip155",
+          chains: ["0x38", "0x893"],
+          metaData: {
+            name: "Mirai App",
+            description: "Mirai App",
+            icons: [""],
+          },
+          onOpenConnectionModal: async (
+            connnection: MiraiConnection,
+            url: string
+          ) => {
+            console.log("url", new URL(url));
+            console.log("connnection", connnection);
 
-  //           await MiraiWindow.open(url, "Mirai App", connnection.topicId);
-  //         },
-  //         onCloseConnectionModal: async (connnection: MiraiConnection) => {
-  //           setMiraiConnection(null);
-  //         },
-  //         redirectUri: "https://miraiid.io",
-  //       });
+            await MiraiWindow.open(url, "Mirai App", connnection.topicId);
+          },
+          onCloseConnectionModal: async (connnection: MiraiConnection) => {
+            setMiraiConnection(null);
+          },
+          redirectUri: "https://miraiid.io",
+        });
 
-  //       setMiraiCore(miraiCore);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   })();
-  // }, []);
+        setMiraiCore(miraiCore);
 
-  // const showModal = async () => {
-  //   if (miraiCore && miraiConnection) {
-  //     await miraiCore.showConnectionModal(miraiConnection);
-  //   }
-  // };
+        if (miraiCore) {
+          toastSuccess("Initialized MiraiCore");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, []);
+
+  const showModal = async () => {
+    if (miraiCore && miraiConnection) {
+      await miraiCore.showConnectionModal(miraiConnection);
+    }
+  };
 
   // useEffect(() => {
   //   (async () => {
@@ -189,30 +236,35 @@ export default function Home() {
   //     }
   //   })();
   // }, [provider]);
-  // // FOR SDK CLIENT
+  // FOR SDK CLIENT
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (miraiConnection) {
-  //       miraiConnection
-  //         .on("approved", async ({ topicId }) => {
-  //           setProvider(await miraiConnection.getProvider());
-  //           setStatus("approved");
-  //         })
-  //         .on("rejected", (e) => {
-  //           setStatus("rejected");
-  //         });
-  //       await showModal();
-  //       console.log("miraiConnection", miraiConnection);
-  //     }
-  //   })();
-  // }, [miraiConnection]);
+  useEffect(() => {
+    (async () => {
+      if (miraiConnection) {
+        miraiConnection
+          .on("approved", async ({ topicId }) => {
+            setProvider(await miraiConnection.getProvider());
+            setStatus("approved");
+          })
+          .on("rejected", (e) => {
+            setStatus("rejected");
+          });
 
-  // useEffect(() => {
-  //   if (status === "approved") {
-  //     alert("approved");
-  //   }
-  // }, [status]);
+        miraiCore?.on("disconnected", (reason) => {
+          toastError(reason);
+        });
+        await showModal();
+      }
+    })();
+  }, [miraiConnection]);
+
+  useEffect(() => {
+    if (status === "approved") {
+      toastSuccess("User approved session");
+    } else {
+      toastError("User rejected session");
+    }
+  }, [status]);
 
   const getTopic = async () => {
     try {
@@ -315,7 +367,7 @@ export default function Home() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Method"
                 onChange={(evt) => {
-                  setMethod(evt.target.value);
+                  setMethod(evt.target.value as RpcMethod);
                 }}
               />
               <textarea
@@ -379,14 +431,120 @@ export default function Home() {
             {isGettting ? "watting..." : "Request"}
           </button>
         </>
-        {/* {isConnectting ||
-          (miraiConnection && (
-            <button className="block text-white bg-green-700  hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-              {isConnectting
-                ? `Connectting`
-                : `${status === null ? "Connected" : status.toUpperCase()}`}
+        <button
+          data-modal-target="defaultModal"
+          data-modal-toggle="defaultModal"
+          className="block text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+          type="button"
+          style={{ marginLeft: "10px" }}
+          onClick={async () => {
+            if (!miraiConnection) {
+              try {
+                setIsLoadingModal(true);
+
+                if (accessToken) {
+                  const connection = await miraiCore?.connect({
+                    accessToken,
+                  });
+
+                  if (connection) {
+                    setMiraiConnection(connection);
+                  }
+                } else {
+                  toastError("Not found access token");
+                }
+              } catch {
+              } finally {
+                setIsLoadingModal(false);
+              }
+            } else {
+              await miraiConnection.disconnect();
+            }
+          }}
+        >
+          {isLoadingModal
+            ? "Loading ..."
+            : miraiConnection
+            ? "Disconnect"
+            : "Connect mirai"}
+        </button>
+
+        {miraiConnection && (
+          <button
+            data-modal-target="defaultModal"
+            data-modal-toggle="defaultModal"
+            className="block text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+            type="button"
+            style={{ marginLeft: "10px" }}
+            onClick={async () => {
+              setIsLoadingModal(true);
+
+              await showModal();
+
+              setIsLoadingModal(false);
+            }}
+          >
+            {isLoadingModal ? "Loading ..." : "Show modal"}
+          </button>
+        )}
+
+        {status === "approved" && (
+          <>
+            <input
+              value={chainId}
+              style={{ marginBottom: "20px" }}
+              type="text"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="ChainId"
+              onChange={(evt) => {
+                setChainId(evt.target.value);
+              }}
+            />
+            <input
+              value={method}
+              type="text"
+              style={{ marginBottom: "20px" }}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Method"
+              onChange={(evt) => {
+                setMethod(evt.target.value as RpcMethod);
+              }}
+            />
+            <textarea
+              value={params}
+              style={{ marginBottom: "20px" }}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Params"
+              onChange={(evt) => {
+                setParams(evt.target.value);
+              }}
+              rows={10}
+            />
+            <button
+              data-modal-target="defaultModal"
+              data-modal-toggle="defaultModal"
+              className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              type="button"
+              style={{ marginLeft: "10px" }}
+              onClick={async () => {
+                setIsLoadingModal(true);
+
+                try {
+                  await provider?.request({
+                    method: method as RpcMethod,
+                    params: JSON.parse(params),
+                  });
+                } catch (e) {
+                  toastError(e as string);
+                } finally {
+                  setIsLoadingModal(false);
+                }
+              }}
+            >
+              {isLoadingModal ? "watting..." : "Request"}
             </button>
-          ))} */}
+          </>
+        )}
       </div>
     </main>
   );
