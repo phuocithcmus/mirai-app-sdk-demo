@@ -268,7 +268,7 @@ export default function Home() {
               setIsConnectting(false);
             }}
           >
-            Get Topic
+            Get QRCode
           </button>
         </>
         {/* {isConnectting ||
