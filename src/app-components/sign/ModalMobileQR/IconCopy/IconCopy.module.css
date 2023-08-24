@@ -1,0 +1,31 @@
+.root {
+  position: relative;
+  width: 24.0195px;
+  height: 24.0193px;
+  align-items: flex-start;
+  transform: matrix(0, -1, 1, 0, 0, 0);
+}
+.vector2 {
+  position: absolute;
+  left: 33.3388%;
+  right: 16.6612%;
+  top: 33.3391%;
+  bottom: 16.6609%;
+  overflow: visible;
+}
+.icon {
+  width: 100%;
+  height: 100%;
+}
+.vector3 {
+  position: absolute;
+  left: 16.6694%;
+  right: 33.3306%;
+  top: 16.6655%;
+  bottom: 33.3345%;
+  overflow: visible;
+}
+.icon2 {
+  width: 100%;
+  height: 100%;
+}
