@@ -69,6 +69,7 @@ export default function Home() {
     setQrCode("");
     setUri("");
     setTopicId("");
+    setMessage("");
   });
 
   socket.on("disconnect", (reason) => {
