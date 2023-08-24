@@ -58,6 +58,7 @@ export default function Home() {
 
   socket.on("connect", () => {
     console.log("connected");
+    toast.success(`WS connected - id: ${socket.id}`);
     setSocketId(`ws connected: id: ${socket.id}`);
 
     setQrCode("");
@@ -71,11 +72,16 @@ export default function Home() {
     console.log("disconnected", reason);
     setIsConnectting(false);
 
+    toast.error(`WS disconnected - Reason: ${reason}`);
+
     setMessage(`ws disconnected: reason: ${reason}`);
   });
 
   socket.on("uri", async (uri) => {
     console.log("uri", uri);
+
+    toast.success(`New URI received - uri: ${uri}`);
+
     setUri(uri);
     setQrCode(await QRCode.toDataURL(uri));
   });
@@ -87,12 +93,16 @@ export default function Home() {
 
   socket.on("error-topic", (message) => {
     console.log("error-topic", message);
+
+    toast.error(`error-topic - message: ${message}`);
     setMessage(message);
   });
 
   socket.on("error", (message) => {
     console.log("error", message);
     setMessage(message);
+
+    toast.error(`error - message: ${message}`);
 
     setIsConnectting(false);
   });
