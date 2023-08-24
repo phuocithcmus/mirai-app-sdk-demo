@@ -213,19 +213,17 @@ export default function Home() {
       const topic = await axios.post(
         `https://dev-sign-provider.miraiid.io/api/provider/send-request/${topicId}`,
         {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
+          chainId: `eip155:${chainId}`,
+          request: {
+            method,
+            params: JSON.parse(params),
           },
         },
         {
-          method: "PUT",
-          data: {
-            chainId: `eip155:${chainId}`,
-            request: {
-              method,
-              params: JSON.parse(params),
-            },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
           },
+          method: "PUT",
         }
       );
     } catch (e) {
