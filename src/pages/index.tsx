@@ -211,7 +211,7 @@ export default function Home() {
   ) => {
     try {
       const topic = await axios.post(
-        `https://dev-sign-provider.miraiid.io/api/provider/${topicId}`,
+        `https://dev-sign-provider.miraiid.io/api/provider/send-request/${topicId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
