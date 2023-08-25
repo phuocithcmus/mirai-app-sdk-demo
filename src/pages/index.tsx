@@ -366,7 +366,7 @@ export default function Home() {
             setWcUri(null);
 
             if (miraiConnection) {
-              miraiCore?.disconnect(miraiConnection);
+              await miraiConnection.disconnect();
             }
           }}
         />

@@ -610,10 +610,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mirailabs-co/miraiid-js@^2.4.7":
-  version "2.4.7"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/2.4.7/83e2a1334039def206e5284c14941b7716d62b17#83e2a1334039def206e5284c14941b7716d62b17"
-  integrity sha512-bRNJ+ZotYKIVnkKgVv711WoZmZPbolcuc1bkda7cscpchvYRji/sMQQxzDqeSSFKmCSOEg1dL+jnH/mCG/cH5A==
+"@mirailabs-co/miraiid-js@^2.4.8":
+  version "2.4.8"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/2.4.8/97d591d49e2c07f7dff6f64a92222889348e87a5#97d591d49e2c07f7dff6f64a92222889348e87a5"
+  integrity sha512-Pg8gEW11x1Imi2jW34rtXjcp81sZe7wRP3MOmyvcmEYpp6q1U3g8YDC5RY0WewOHeUFMzBdZdlmgDN0ZwYUtSA==
   dependencies:
     axios "^1.4.0"
     base64-js "^1.5.1"
