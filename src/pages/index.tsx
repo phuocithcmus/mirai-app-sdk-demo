@@ -503,10 +503,12 @@ export default function Home() {
               setIsLoadingModal(true);
 
               try {
-                await provider?.request({
+                const response = await provider?.request({
                   method: method as RpcMethod,
                   params: JSON.parse(params),
                 });
+
+                setMessage(response as string);
               } catch (e) {
                 toastError(e as string);
               } finally {
