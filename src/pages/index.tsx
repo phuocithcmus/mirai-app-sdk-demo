@@ -294,8 +294,8 @@ export default function Home() {
             setStatus("rejected");
           });
 
-        miraiCore?.on("disconnected", (reason) => {
-          toastError(reason);
+        miraiCore?.on("disconnected", (connection: MiraiConnection) => {
+          toastError(connection.topicId);
         });
       }
     })();
@@ -560,12 +560,12 @@ export default function Home() {
         >
           {isLoadingModal
             ? "Loading ..."
-            : miraiConnection
+            : miraiConnection && miraiConnection.isConnected()
             ? "Disconnect"
             : "Connect mirai"}
         </button>
 
-        {miraiConnection && (
+        {miraiConnection && miraiConnection.isConnected() && (
           <button
             data-modal-target="defaultModal"
             data-modal-toggle="defaultModal"
