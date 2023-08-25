@@ -154,7 +154,7 @@ export default function Home() {
 
   socket.on("response", (response) => {
     console.log("error", response);
-    toast(`Received message: ${response}`, {
+    toast.success(`Received message: ${response}`, {
       style: {
         wordBreak: "break-all",
       },
@@ -388,52 +388,62 @@ export default function Home() {
         </div>
       </div>
       <div className="relative flex place-items-center ">
-        <>
-          <button
-            data-modal-target="defaultModal"
-            data-modal-toggle="defaultModal"
-            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button"
-            onClick={async () => {
-              setIsConnectting(true);
-              socket.connect();
-            }}
-          >
-            {isConnectting ? "Connectting" : "Connect"}
-          </button>
-          <button
-            data-modal-target="defaultModal"
-            data-modal-toggle="defaultModal"
-            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button"
-            style={{ marginLeft: "10px" }}
-            onClick={async () => {
-              setIsGetting(true);
+        <button
+          data-modal-target="defaultModal"
+          data-modal-toggle="defaultModal"
+          className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          type="button"
+          onClick={async () => {
+            setIsConnectting(true);
+            socket.connect();
+          }}
+        >
+          {isConnectting ? "Connectting" : "Connect"}
+        </button>
+        {(socketId || qrcode) && (
+          <>
+            {socketId && (
+              <>
+                <button
+                  data-modal-target="defaultModal"
+                  data-modal-toggle="defaultModal"
+                  className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  type="button"
+                  style={{ marginLeft: "10px" }}
+                  onClick={async () => {
+                    setIsGetting(true);
 
-              await getTopic();
+                    await getTopic();
 
-              setIsGetting(false);
-            }}
-          >
-            {isGettting ? "watting..." : "Get QRCode"}
-          </button>
-          <button
-            data-modal-target="defaultModal"
-            data-modal-toggle="defaultModal"
-            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button"
-            style={{ marginLeft: "10px" }}
-            onClick={async () => {
-              setIsGetting(true);
+                    setIsGetting(false);
+                  }}
+                >
+                  {isGettting ? "watting..." : "Get QRCode"}
+                </button>
+              </>
+            )}
+            {qrcode && (
+              <>
+                <button
+                  data-modal-target="defaultModal"
+                  data-modal-toggle="defaultModal"
+                  className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  type="button"
+                  style={{ marginLeft: "10px" }}
+                  onClick={async () => {
+                    setIsGetting(true);
 
-              await request(topicId, chainId, method, params);
+                    await request(topicId, chainId, method, params);
 
-              setIsGetting(false);
-            }}
-          >
-            {isGettting ? "watting..." : "Request"}
-          </button>
-        </>
+                    setIsGetting(false);
+                  }}
+                >
+                  {isGettting ? "watting..." : "Request"}
+                </button>
+              </>
+            )}
+          </>
+        )}
         <button
           data-modal-target="defaultModal"
           data-modal-toggle="defaultModal"
@@ -508,7 +518,9 @@ export default function Home() {
                   params: JSON.parse(params),
                 });
 
-                setMessage(response as string);
+                console.log(response);
+
+                // setMessage(response as string);
               } catch (e) {
                 toastError(e as string);
               } finally {
