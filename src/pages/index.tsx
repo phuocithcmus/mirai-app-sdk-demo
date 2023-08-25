@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 //   MiraiWindow,
 // } from "@mirailabs-co/miraiid-js";
 import { io, connect, Socket } from "socket.io-client";
-import parser from "socket.io-msgpack-parser";
 import QRCode from "qrcode";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -16,7 +15,11 @@ import {
   MiraiSignCore,
   MiraiSignProvider,
   MiraiWindow,
+  auth,
 } from "@mirailabs-co/miraiid-js";
+import { toUtf8Bytes, keccak256 } from "ethers";
+import jwt_decode from "jwt-decode";
+import { ModalMobileQR } from "@/app-components/sign/ModalMobileQR/ModalMobileQR";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,13 +43,33 @@ export type RpcMethod =
   // | 'wallet_registerOnboarding'
   | "eth_chainId";
 
+export const parseUserInfoFromAccessToken = async (
+  accessToken: string
+): Promise<auth.TMiraiAccessToken | null> => {
+  if (!accessToken) {
+    throw new Error("No access token found");
+  }
+
+  try {
+    return (await jwt_decode(accessToken)) as auth.TMiraiAccessToken;
+  } catch (e) {
+    console.log(e);
+  }
+
+  return null;
+};
+
+export function calculateRoomId(userId: string, clientId: string) {
+  return keccak256(toUtf8Bytes(`${userId}${clientId}`));
+}
+
 export default function Home() {
   const [account, setAccount] = useState<string | null>(null);
 
   const [message, setMessage] = useState<string>("");
-  const [message_unsigned, setMessageUnsigned] = useState<string>("");
+  const [socketRoomId, setSocketRoomId] = useState<string>("");
   const [status, setStatus] = useState<"approved" | "rejected" | null>(null);
-  const [wallet_client, setWalletClient] = useState<any>(null);
+  const [chainIdConnect, setChainIdConnect] = useState<string>("1,56");
   const [onSigning, setOnSigning] = useState<boolean>(false);
   const [topicId, setTopicId] = useState<string>("");
   const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
@@ -60,6 +83,7 @@ export default function Home() {
   const [qrcode, setQrCode] = useState<string>("");
   const [uri, setUri] = useState<string>("");
   const [socketId, setSocketId] = useState<string>("");
+  const [wc_uri, setWcUri] = useState<string | null>(null);
 
   const [accessToken, setAccessToken] = useState<string>("");
   const [chainId, setChainId] = useState<string>("56");
@@ -78,10 +102,6 @@ export default function Home() {
       authorization: accessToken,
     },
   });
-
-  // socket.on(socket.id, (e) => {
-  //   console.log(e);
-  // });
 
   socket.on("connect", () => {
     console.log("connected");
@@ -104,62 +124,67 @@ export default function Home() {
     setMessage(`ws disconnected: reason: ${reason}`);
   });
 
-  socket.on("uri", async (uri) => {
-    console.log("uri", uri);
+  socket.on("socket-event", async (received: any) => {
+    console.log("received", received);
+    const { type, payload } = received;
 
-    toast.success(`New URI received - uri: ${uri}`, {
-      style: {
-        wordBreak: "break-all",
-      },
-    });
+    if (type === "uri") {
+      console.log("uri", payload);
 
-    setUri(uri);
-    setQrCode(await QRCode.toDataURL(uri));
-  });
+      toast.success(`New URI received - uri: ${payload}`, {
+        style: {
+          wordBreak: "break-all",
+        },
+      });
 
-  socket.on("topic", (topic) => {
-    console.log("topic", topic);
-    toast.success(`New topic received - topic: ${topic}`, {
-      style: {
-        wordBreak: "break-all",
-      },
-    });
+      setUri(payload);
+      setQrCode(await QRCode.toDataURL(payload));
+    }
 
-    setTopicId(topic);
-  });
+    if (type === "topic") {
+      console.log("topic", payload);
+      toast.success(`New topic received - topic: ${payload}`, {
+        style: {
+          wordBreak: "break-all",
+        },
+      });
 
-  socket.on("error-topic", (message) => {
-    console.log("error-topic", message);
+      setTopicId(payload);
+    }
 
-    toast.error(`error-topic - message: ${message}`, {
-      style: {
-        wordBreak: "break-all",
-      },
-    });
-    setMessage(message);
-  });
+    if (type === "error-topic") {
+      console.log("error-topic", payload);
 
-  socket.on("error", (message) => {
-    console.log("error", message);
-    setMessage(message);
+      toast.error(`error-topic - message: ${payload}`, {
+        style: {
+          wordBreak: "break-all",
+        },
+      });
+      setMessage(payload);
+    }
 
-    toast.error(`error - message: ${message}`, {
-      style: {
-        wordBreak: "break-all",
-      },
-    });
+    if (type === "error") {
+      console.log("error", payload);
+      setMessage(payload);
 
-    setIsConnectting(false);
-  });
+      toast.error(`error - message: ${payload}`, {
+        style: {
+          wordBreak: "break-all",
+        },
+      });
 
-  socket.on("response", (response) => {
-    console.log("error", response);
-    toast.success(`Received message: ${response}`, {
-      style: {
-        wordBreak: "break-all",
-      },
-    });
-    setMessage(response);
+      setIsConnectting(false);
+    }
+
+    if (type === "response") {
+      console.log("error", payload);
+      toast.success(`Received message: ${payload}`, {
+        style: {
+          wordBreak: "break-all",
+        },
+      });
+      setMessage(payload);
+    }
   });
 
   const toastSuccess = (msg: string) => {
@@ -177,6 +202,25 @@ export default function Home() {
       },
     });
   };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     if (accessToken) {
+  //       const miraiInfo = await parseUserInfoFromAccessToken(accessToken);
+
+  //       console.log(miraiInfo);
+  //       if (!miraiInfo) {
+  //         socket.disconnect();
+  //       }
+
+  //       if (miraiInfo) {
+  //         const { sub, aud } = miraiInfo;
+  //         const internalTopicId = calculateRoomId(sub, aud);
+  //         setSocketRoomId(internalTopicId);
+  //       }
+  //     }
+  //   })();
+  // }, [accessToken]);
 
   // FOR SDK CLIENT
   useEffect(() => {
@@ -197,11 +241,9 @@ export default function Home() {
           ) => {
             console.log("url", new URL(url));
             console.log("connnection", connnection);
-
-            await MiraiWindow.open(url, "Mirai App", connnection.topicId);
           },
           onCloseConnectionModal: async (connnection: MiraiConnection) => {
-            setMiraiConnection(null);
+            // setMiraiConnection(null);
           },
           redirectUri: "https://miraiid.io",
         });
@@ -219,7 +261,9 @@ export default function Home() {
 
   const showModal = async () => {
     if (miraiCore && miraiConnection) {
-      await miraiCore.showConnectionModal(miraiConnection);
+      const { uri } = await miraiCore.showConnectionModal(miraiConnection);
+
+      setWcUri(await QRCode.toDataURL(uri));
     }
   };
 
@@ -267,8 +311,13 @@ export default function Home() {
 
   const getTopic = async () => {
     try {
-      const topic = await axios.get(
-        "https://dev-sign-provider.miraiid.io/api/provider",
+      await axios.post(
+        `https://dev-sign-provider.miraiid.io/api/provider`,
+        {
+          chainIds: chainIdConnect.split(",").map((chainId: string) => {
+            return `eip155:${Number(chainId)}`;
+          }),
+        },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -309,6 +358,19 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
+      {wc_uri && (
+        <ModalMobileQR
+          id={miraiConnection?.topicId as string}
+          qr={wc_uri}
+          onClose={async () => {
+            setWcUri(null);
+
+            if (miraiConnection) {
+              miraiCore?.disconnect(miraiConnection);
+            }
+          }}
+        />
+      )}
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Mirai App SDK Demo
@@ -322,9 +384,29 @@ export default function Home() {
           setAccessToken(evt.target.value);
         }}
       />
-      <p>{socketId}</p>
+      {socketId && <p>SocketId: {socketId}</p>}
+      {socketRoomId && (
+        <p>
+          Internal Socket RoomId: {socketRoomId}{" "}
+          (keccak256(toUtf8Bytes(subaud)))
+        </p>
+      )}
+
       <p>Message: {message}</p>
-      <div></div>
+      <div>
+        <label htmlFor="id-chain">connect_chain_id: </label>
+        <input
+          id="id-chain"
+          value={chainIdConnect}
+          style={{ marginBottom: "20px" }}
+          type="text"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Chain Id for connecting"
+          onChange={(evt) => {
+            setChainIdConnect(evt.target.value);
+          }}
+        />
+      </div>
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
         <a
           style={{ wordBreak: "break-word" }}

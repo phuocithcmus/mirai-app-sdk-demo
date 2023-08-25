@@ -53,7 +53,7 @@ const SignPage = () => {
     });
   }, []);
 
-  return <ModalMobileQR id={topicId} qr={qrcode} />;
+  return <ModalMobileQR id={topicId} qr={qrcode} onClose={() => {}} />;
 };
 
 export default SignPage;
