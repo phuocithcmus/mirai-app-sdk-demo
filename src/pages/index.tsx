@@ -518,9 +518,7 @@ export default function Home() {
                   params: JSON.parse(params),
                 });
 
-                console.log(response);
-
-                // setMessage(response as string);
+                setMessage(response as string);
               } catch (e) {
                 toastError(e as string);
               } finally {
