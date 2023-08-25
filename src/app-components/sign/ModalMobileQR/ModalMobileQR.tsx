@@ -15,11 +15,11 @@ interface Props {
   className?: string;
   qr: string;
   id: string;
-  onClose: () => void;
+  onClose: () => Promise<void> | unknown;
 }
 /* @figmaId 12:271 */
 export const ModalMobileQR: FC<Props> = memo(function ModalMobileQR(
-  props = { qr: "", id: "", onClose: () => false }
+  props = { qr: "", id: "", onClose: () => Promise<void> }
 ) {
   return (
     <>
@@ -40,7 +40,7 @@ export const ModalMobileQR: FC<Props> = memo(function ModalMobileQR(
                 >
                   <div className={classes.top}>
                     <div className={classes.logo}>
-                      <LogoIcon className={classes.icon4} />
+                      {/* <LogoIcon className={classes.icon4} /> */}
                     </div>
                   </div>
                   <div className={classes.title}>
@@ -60,14 +60,13 @@ export const ModalMobileQR: FC<Props> = memo(function ModalMobileQR(
                     </div>
                   </div>
                 </div>
-
                 <button
                   data-modal-target="defaultModal"
                   data-modal-toggle="defaultModal"
-                  className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="w-full block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   type="button"
                   onClick={async () => {
-                    props.onClose();
+                    await props.onClose();
                   }}
                 >
                   Close
