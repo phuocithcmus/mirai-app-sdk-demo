@@ -69,7 +69,7 @@ export default function Home() {
   const [message, setMessage] = useState<string>("");
   const [socketRoomId, setSocketRoomId] = useState<string>("");
   const [status, setStatus] = useState<"approved" | "rejected" | null>(null);
-  const [chainIdConnect, setChainIdConnect] = useState<string>("1,56");
+  const [chainIdConnect, setChainIdConnect] = useState<string>("1");
   const [onSigning, setOnSigning] = useState<boolean>(false);
   const [topicId, setTopicId] = useState<string>("");
   const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
@@ -229,7 +229,7 @@ export default function Home() {
         const miraiCore = await MiraiSignCore.init({
           clientId: "a0bac604-0fa4-447a-a3de-4deff02008c4",
           chainNameSpace: "eip155",
-          chains: ["0x38", "0x893"],
+          chains: ["0x1"],
           metaData: {
             name: "Mirai App",
             description: "Mirai App",
@@ -289,6 +289,7 @@ export default function Home() {
           .on("approved", async ({ topicId }) => {
             setProvider(await miraiConnection.getProvider());
             setStatus("approved");
+            setWcUri(null);
           })
           .on("rejected", (e) => {
             setStatus("rejected");
