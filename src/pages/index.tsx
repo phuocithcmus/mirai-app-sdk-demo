@@ -297,6 +297,8 @@ export default function Home() {
 
         miraiCore?.on("disconnected", (connection: MiraiConnection) => {
           toastError(connection.topicId);
+
+          setMiraiConnection(null);
         });
       }
     })();
@@ -355,6 +357,19 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    (async () => {
+      if (provider) {
+        const accountConnect = (await provider.request({
+          method: "eth_requestAccounts",
+        })) as string;
+
+        setAccount(accountConnect);
+        toastSuccess(`Connected to account: ${accountConnect}`);
+      }
+    })();
+  }, [provider]);
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -394,6 +409,8 @@ export default function Home() {
       )}
 
       <p>Message: {message}</p>
+      {account && <p>Account: {account}</p>}
+
       <div>
         <label htmlFor="id-chain">connect_chain_id: </label>
         <input
