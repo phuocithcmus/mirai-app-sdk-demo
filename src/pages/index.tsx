@@ -14,12 +14,14 @@ import {
   MiraiConnection,
   MiraiSignCore,
   MiraiSignProvider,
-  MiraiWindow,
   auth,
 } from "@mirailabs-co/miraiid-js";
 import { toUtf8Bytes, keccak256 } from "ethers";
 import jwt_decode from "jwt-decode";
 import { ModalMobileQR } from "@/app-components/sign/ModalMobileQR/ModalMobileQR";
+import { MiraiWeb3Modal } from "@mirailabs-co/mirai-web3-modal";
+
+// import { MiraiWeb3Modal } from "@mirailabs-co/mirai-web3-modal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -92,100 +94,102 @@ export default function Home() {
     '["phuocnd","0x9f3A5240980a94F6CE5f30c6187d047F6650B9a9"]'
   );
 
-  const socket = io("https://dev-sign-provider.miraiid.io", {
-    autoConnect: false,
-    reconnection: false,
-    transports: ["websocket"],
-    upgrade: true,
-    withCredentials: true,
-    auth: {
-      authorization: accessToken,
-    },
-  });
+  const web3Modal = useRef<MiraiWeb3Modal | null>(null);
 
-  socket.on("connect", () => {
-    console.log("connected");
-    toast.success(`WS connected - id: ${socket.id}`);
-    setSocketId(`ws connected: id: ${socket.id}`);
+  // const socket = io("https://dev-sign-provider.miraiid.io", {
+  //   autoConnect: false,
+  //   reconnection: false,
+  //   transports: ["websocket"],
+  //   upgrade: true,
+  //   withCredentials: true,
+  //   auth: {
+  //     authorization: accessToken,
+  //   },
+  // });
 
-    setQrCode("");
-    setUri("");
-    setTopicId("");
-    setMessage("");
-    setIsConnectting(false);
-  });
+  // socket.on("connect", () => {
+  //   console.log("connected");
+  //   toast.success(`WS connected - id: ${socket.id}`);
+  //   setSocketId(`ws connected: id: ${socket.id}`);
 
-  socket.on("disconnect", (reason) => {
-    console.log("disconnected", reason);
-    setIsConnectting(false);
+  //   setQrCode("");
+  //   setUri("");
+  //   setTopicId("");
+  //   setMessage("");
+  //   setIsConnectting(false);
+  // });
 
-    toast.error(`WS disconnected - Reason: ${reason}`);
+  // socket.on("disconnect", (reason) => {
+  //   console.log("disconnected", reason);
+  //   setIsConnectting(false);
 
-    setMessage(`ws disconnected: reason: ${reason}`);
-  });
+  //   toast.error(`WS disconnected - Reason: ${reason}`);
 
-  socket.on("socket-event", async (received: any) => {
-    console.log("received", received);
-    const { type, payload } = received;
+  //   setMessage(`ws disconnected: reason: ${reason}`);
+  // });
 
-    if (type === "uri") {
-      console.log("uri", payload);
+  // socket.on("socket-event", async (received: any) => {
+  //   console.log("received", received);
+  //   const { type, payload } = received;
 
-      toast.success(`New URI received - uri: ${payload}`, {
-        style: {
-          wordBreak: "break-all",
-        },
-      });
+  //   if (type === "uri") {
+  //     console.log("uri", payload);
 
-      setUri(payload);
-      setQrCode(await QRCode.toDataURL(payload));
-    }
+  //     toast.success(`New URI received - uri: ${payload}`, {
+  //       style: {
+  //         wordBreak: "break-all",
+  //       },
+  //     });
 
-    if (type === "topic") {
-      console.log("topic", payload);
-      toast.success(`New topic received - topic: ${payload}`, {
-        style: {
-          wordBreak: "break-all",
-        },
-      });
+  //     setUri(payload);
+  //     setQrCode(await QRCode.toDataURL(payload));
+  //   }
 
-      setTopicId(payload);
-    }
+  //   if (type === "topic") {
+  //     console.log("topic", payload);
+  //     toast.success(`New topic received - topic: ${payload}`, {
+  //       style: {
+  //         wordBreak: "break-all",
+  //       },
+  //     });
 
-    if (type === "error-topic") {
-      console.log("error-topic", payload);
+  //     setTopicId(payload);
+  //   }
 
-      toast.error(`error-topic - message: ${payload}`, {
-        style: {
-          wordBreak: "break-all",
-        },
-      });
-      setMessage(payload);
-    }
+  //   if (type === "error-topic") {
+  //     console.log("error-topic", payload);
 
-    if (type === "error") {
-      console.log("error", payload);
-      setMessage(payload);
+  //     toast.error(`error-topic - message: ${payload}`, {
+  //       style: {
+  //         wordBreak: "break-all",
+  //       },
+  //     });
+  //     setMessage(payload);
+  //   }
 
-      toast.error(`error - message: ${payload}`, {
-        style: {
-          wordBreak: "break-all",
-        },
-      });
+  //   if (type === "error") {
+  //     console.log("error", payload);
+  //     setMessage(payload);
 
-      setIsConnectting(false);
-    }
+  //     toast.error(`error - message: ${payload}`, {
+  //       style: {
+  //         wordBreak: "break-all",
+  //       },
+  //     });
 
-    if (type === "response") {
-      console.log("error", payload);
-      toast.success(`Received message: ${payload}`, {
-        style: {
-          wordBreak: "break-all",
-        },
-      });
-      setMessage(payload);
-    }
-  });
+  //     setIsConnectting(false);
+  //   }
+
+  //   if (type === "response") {
+  //     console.log("error", payload);
+  //     toast.success(`Received message: ${payload}`, {
+  //       style: {
+  //         wordBreak: "break-all",
+  //       },
+  //     });
+  //     setMessage(payload);
+  //   }
+  // });
 
   const toastSuccess = (msg: string) => {
     toast.success(msg, {
@@ -223,6 +227,7 @@ export default function Home() {
   // }, [accessToken]);
 
   // FOR SDK CLIENT
+
   useEffect(() => {
     (async () => {
       try {
@@ -235,16 +240,16 @@ export default function Home() {
             description: "Mirai App",
             icons: [""],
           },
-          onOpenConnectionModal: async (
-            connnection: MiraiConnection,
-            url: string
-          ) => {
-            console.log("url", new URL(url));
-            console.log("connnection", connnection);
-          },
-          onCloseConnectionModal: async (connnection: MiraiConnection) => {
-            // setMiraiConnection(null);
-          },
+          // onOpenConnectionModal: async (
+          //   connnection: MiraiConnection,
+          //   url: string
+          // ) => {
+          //   console.log("url", new URL(url));
+          //   console.log("connnection", connnection);
+          // },
+          // onCloseConnectionModal: async (connnection: MiraiConnection) => {
+          //   // setMiraiConnection(null);
+          // },
           redirectUri: "https://miraiid.io",
         });
 
@@ -262,8 +267,18 @@ export default function Home() {
   const showModal = async () => {
     if (miraiCore && miraiConnection) {
       const { uri } = await miraiCore.showConnectionModal(miraiConnection);
+      console.log("uri", uri);
 
-      setWcUri(await QRCode.toDataURL(uri));
+      const web3modal = new MiraiWeb3Modal();
+      if (web3modal) {
+        await web3modal.openModal({
+          uri,
+        });
+
+        web3Modal.current = web3modal;
+      }
+
+      // setWcUri(await QRCode.toDataURL(uri));
     }
   };
 
@@ -289,16 +304,22 @@ export default function Home() {
           .on("approved", async ({ topicId }) => {
             setProvider(await miraiConnection.getProvider());
             setStatus("approved");
+
+            await web3Modal.current?.closeModal();
             setWcUri(null);
           })
-          .on("rejected", (e) => {
+          .on("rejected", async (e) => {
+            await web3Modal.current?.closeModal();
             setStatus("rejected");
           });
 
         miraiCore?.on("disconnected", (connection: MiraiConnection) => {
-          toastError(connection.topicId);
-
-          setMiraiConnection(null);
+          if (!connection) {
+            toastError("Connected reset ");
+          } else {
+            toastError(connection.topicId);
+            setMiraiConnection(null);
+          }
         });
       }
     })();
@@ -441,7 +462,7 @@ export default function Home() {
         <div>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>{uri}</p>
 
-          {(topicId || status === "approved") && (
+          {(topicId || (status === "approved" && miraiConnection)) && (
             <>
               <div
                 style={{ marginTop: "20px", marginBottom: "20px" }}
@@ -488,7 +509,7 @@ export default function Home() {
         </div>
       </div>
       <div className="relative flex place-items-center ">
-        <button
+        {/* <button
           data-modal-target="defaultModal"
           data-modal-toggle="defaultModal"
           className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -499,7 +520,7 @@ export default function Home() {
           }}
         >
           {isConnectting ? "Connectting" : "Connect"}
-        </button>
+        </button> */}
         {(socketId || qrcode) && (
           <>
             {socketId && (
@@ -602,32 +623,36 @@ export default function Home() {
           </button>
         )}
 
-        {status === "approved" && (
-          <button
-            data-modal-target="defaultModal"
-            data-modal-toggle="defaultModal"
-            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button"
-            style={{ marginLeft: "10px" }}
-            onClick={async () => {
-              setIsLoadingModal(true);
+        {miraiConnection && (
+          <>
+            {status === "approved" && (
+              <button
+                data-modal-target="defaultModal"
+                data-modal-toggle="defaultModal"
+                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button"
+                style={{ marginLeft: "10px" }}
+                onClick={async () => {
+                  setIsLoadingModal(true);
 
-              try {
-                const response = await provider?.request({
-                  method: method as RpcMethod,
-                  params: JSON.parse(params),
-                });
+                  try {
+                    const response = await provider?.request({
+                      method: method as RpcMethod,
+                      params: JSON.parse(params),
+                    });
 
-                setMessage(response as string);
-              } catch (e) {
-                toastError(e as string);
-              } finally {
-                setIsLoadingModal(false);
-              }
-            }}
-          >
-            {isLoadingModal ? "watting..." : "Request"}
-          </button>
+                    setMessage(response as string);
+                  } catch (e) {
+                    toastError(e as string);
+                  } finally {
+                    setIsLoadingModal(false);
+                  }
+                }}
+              >
+                {isLoadingModal ? "watting..." : "Request"}
+              </button>
+            )}
+          </>
         )}
       </div>
     </main>
