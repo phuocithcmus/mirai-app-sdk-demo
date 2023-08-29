@@ -240,16 +240,6 @@ export default function Home() {
             description: "Mirai App",
             icons: [""],
           },
-          // onOpenConnectionModal: async (
-          //   connnection: MiraiConnection,
-          //   url: string
-          // ) => {
-          //   console.log("url", new URL(url));
-          //   console.log("connnection", connnection);
-          // },
-          // onCloseConnectionModal: async (connnection: MiraiConnection) => {
-          //   // setMiraiConnection(null);
-          // },
           redirectUri: "https://miraiid.io",
         });
 
@@ -308,7 +298,7 @@ export default function Home() {
             await web3Modal.current?.closeModal();
             setWcUri(null);
           })
-          .on("rejected", async (e) => {
+          .on("rejected", async ({ message }) => {
             await web3Modal.current?.closeModal();
             setStatus("rejected");
           });
@@ -329,7 +319,7 @@ export default function Home() {
     if (status === "approved") {
       toastSuccess("User approved session");
     } else if (status === "rejected") {
-      toastError("User rejected session");
+      toastError("User rejected method");
     }
   }, [status]);
 
@@ -358,6 +348,7 @@ export default function Home() {
     params: string
   ) => {
     try {
+      console.log(params, method);
       const topic = await axios.put(
         `https://dev-sign-provider.miraiid.io/api/provider/send-request/${topicId}`,
         {
