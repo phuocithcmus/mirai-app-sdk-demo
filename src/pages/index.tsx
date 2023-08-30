@@ -72,14 +72,11 @@ export default function Home() {
   const [socketRoomId, setSocketRoomId] = useState<string>("");
   const [status, setStatus] = useState<"approved" | "rejected" | null>(null);
   const [chainIdConnect, setChainIdConnect] = useState<string>("1");
-  const [onSigning, setOnSigning] = useState<boolean>(false);
   const [topicId, setTopicId] = useState<string>("");
   const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
   const [miraiCore, setMiraiCore] = useState<MiraiSignCore | null>(null);
   const [miraiConnection, setMiraiConnection] =
     useState<MiraiConnection | null>(null);
-  const [showSignArea, setShowSignArea] = useState<boolean>(false);
-  const [isConnectting, setIsConnectting] = useState<boolean>(false);
   const [isGettting, setIsGetting] = useState<boolean>(false);
   const [isLoadingModal, setIsLoadingModal] = useState<boolean>(false);
   const [qrcode, setQrCode] = useState<string>("");
@@ -88,7 +85,7 @@ export default function Home() {
   const [wc_uri, setWcUri] = useState<string | null>(null);
 
   const [accessToken, setAccessToken] = useState<string>("");
-  const [chainId, setChainId] = useState<string>("56");
+  const [chainId, setChainId] = useState<string>("0x38");
   const [method, setMethod] = useState<RpcMethod>("personal_sign");
   const [params, setParams] = useState<string>(
     '["phuocnd","0x9f3A5240980a94F6CE5f30c6187d047F6650B9a9"]'
