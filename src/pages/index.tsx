@@ -229,7 +229,8 @@ export default function Home() {
         const miraiCore = await MiraiSignCore.init({
           clientId: "a0bac604-0fa4-447a-a3de-4deff02008c4",
           chainNameSpace: "eip155",
-          chains: ["0x1", "0x38"],
+          chains: ["0x38", "0x1"],
+          defaultChainId: "0x38",
           metaData: {
             name: "Mirai App",
             description: "Mirai App",

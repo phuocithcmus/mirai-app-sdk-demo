@@ -11,7 +11,7 @@
   "dependencies": {
     "@lit-labs/react": "^2.0.1",
     "@mirailabs-co/mirai-web3-modal": "^0.1.6",
-    "@mirailabs-co/miraiid-js": "^2.7.2",
+    "@mirailabs-co/miraiid-js": "^2.7.8",
     "@types/node": "20.5.2",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
