@@ -85,7 +85,7 @@ export default function Home() {
   const [wc_uri, setWcUri] = useState<string | null>(null);
 
   const [accessToken, setAccessToken] = useState<string>("");
-  const [chainId, setChainId] = useState<string>("0x38");
+  const [chainId, setChainId] = useState<string | null>(null);
   const [method, setMethod] = useState<RpcMethod>("personal_sign");
   const [params, setParams] = useState<string>('[{"chainId": "0x38"}]');
 
@@ -290,13 +290,6 @@ export default function Home() {
             const provider = await miraiConnection.getProvider();
             setProvider(provider);
 
-            provider
-              .on("accountsChanged", (args) => {
-                console.log(args);
-              })
-              .on("chainChanged", (args) => {
-                console.log(args);
-              });
             setStatus("approved");
 
             await web3Modal.current?.closeModal();
@@ -376,12 +369,20 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       if (provider) {
-        const accountConnect = (await provider.request({
-          method: "eth_requestAccounts",
-        })) as string;
+        setAccount(provider.accounts[0]);
+        setChainId(provider.chainId);
+        toastSuccess(`Connected to account: ${provider.accounts[0]}`);
+        toastSuccess(`Connected to chain: ${provider.chainId}`);
 
-        setAccount(accountConnect);
-        toastSuccess(`Connected to account: ${accountConnect}`);
+        provider
+          .on("accountsChanged", (args) => {
+            toastSuccess(`Connected to account: ${args[0]}`);
+            setAccount(args[0]);
+          })
+          .on("chainChanged", (args) => {
+            toastSuccess(`Connected to chain: ${args}`);
+            setChainId(args);
+          });
       }
     })();
   }, [provider]);
@@ -390,7 +391,7 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      {wc_uri && (
+      {wc_uri && miraiConnection && (
         <ModalMobileQR
           id={miraiConnection?.topicId as string}
           qr={wc_uri}
@@ -426,9 +427,9 @@ export default function Home() {
 
       <p>Message: {message}</p>
       {account && <p>Account: {account}</p>}
-
-      <div>
-        <label htmlFor="id-chain">connect_chain_id: </label>
+      {chainId && <p>ChainId: {chainId}</p>}
+      {/* <div>
+        <label htmlFor="id-chain">ChainId: </label>
         <input
           id="id-chain"
           value={chainIdConnect}
@@ -440,7 +441,7 @@ export default function Home() {
             setChainIdConnect(evt.target.value);
           }}
         />
-      </div>
+      </div> */}
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
         <a
           style={{ wordBreak: "break-word" }}
@@ -469,7 +470,7 @@ export default function Home() {
                   </>
                 )}
               </div>
-              <input
+              {/* <input
                 value={chainId}
                 style={{ marginBottom: "20px" }}
                 type="text"
@@ -478,7 +479,7 @@ export default function Home() {
                 onChange={(evt) => {
                   setChainId(evt.target.value);
                 }}
-              />
+              /> */}
               <input
                 value={method}
                 type="text"
@@ -549,7 +550,7 @@ export default function Home() {
                   onClick={async () => {
                     setIsGetting(true);
 
-                    await request(topicId, chainId, method, params);
+                    // await request(topicId, chainId, method, params);
 
                     setIsGetting(false);
                   }}
