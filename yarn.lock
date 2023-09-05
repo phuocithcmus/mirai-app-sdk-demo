@@ -655,10 +655,10 @@
     typescript-plugin-css-modules "^5.0.1"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^2.6.4":
-  version "2.6.4"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/2.6.4/20620e73a68951b23ae769a99d636a12893c515f#20620e73a68951b23ae769a99d636a12893c515f"
-  integrity sha512-cDSMPRPfGDA1gUajHY5gSc/cYf2ufQOmIAcbyLIiZ/bwhQmrP4usZ92sT1iwh2u9V3lm8xs7g/PIaCxa/5lbAQ==
+"@mirailabs-co/miraiid-js@^2.6.6":
+  version "2.6.6"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/2.6.6/d7671c25be515e46c349796ba50f6f7da738e6b6#d7671c25be515e46c349796ba50f6f7da738e6b6"
+  integrity sha512-e4NGiObf0Eau5oK9mX+wN2XDF+AXv9oQjbkXrsfufKxVqgzTo5Vp+Jmq2j6y4NkQxf+eLVwZ5iVwDYVLmGJdig==
   dependencies:
     axios "^1.4.0"
     base64-js "^1.5.1"
