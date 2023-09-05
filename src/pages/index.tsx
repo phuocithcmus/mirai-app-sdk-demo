@@ -87,9 +87,7 @@ export default function Home() {
   const [accessToken, setAccessToken] = useState<string>("");
   const [chainId, setChainId] = useState<string>("0x38");
   const [method, setMethod] = useState<RpcMethod>("personal_sign");
-  const [params, setParams] = useState<string>(
-    '["phuocnd","0x9f3A5240980a94F6CE5f30c6187d047F6650B9a9"]'
-  );
+  const [params, setParams] = useState<string>('[{"chainId": "0x38"}]');
 
   const web3Modal = useRef<MiraiWeb3Modal | null>(null);
 
@@ -231,7 +229,7 @@ export default function Home() {
         const miraiCore = await MiraiSignCore.init({
           clientId: "a0bac604-0fa4-447a-a3de-4deff02008c4",
           chainNameSpace: "eip155",
-          chains: ["0x38", "0x1"],
+          chains: ["0x1", "0x38"],
           metaData: {
             name: "Mirai App",
             description: "Mirai App",
@@ -289,7 +287,16 @@ export default function Home() {
       if (miraiConnection) {
         miraiConnection
           .on("approved", async ({ topicId }) => {
-            setProvider(await miraiConnection.getProvider());
+            const provider = await miraiConnection.getProvider();
+            setProvider(provider);
+
+            provider
+              .on("accountsChanged", (args) => {
+                console.log(args);
+              })
+              .on("chainChanged", (args) => {
+                console.log(args);
+              });
             setStatus("approved");
 
             await web3Modal.current?.closeModal();
@@ -305,8 +312,8 @@ export default function Home() {
             toastError("Connected reset ");
           } else {
             toastError(connection.topicId);
-            setMiraiConnection(null);
           }
+          setMiraiConnection(null);
         });
       }
     })();
