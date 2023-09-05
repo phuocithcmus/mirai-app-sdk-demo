@@ -250,6 +250,12 @@ export default function Home() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (window !== undefined && typeof window !== "undefined") {
+      setAccessToken(window.localStorage.getItem("accessToken") as string);
+    }
+  }, []);
+
   const showModal = async () => {
     if (miraiCore && miraiConnection) {
       const { uri } = await miraiCore.showConnectionModal(miraiConnection);
@@ -581,6 +587,10 @@ export default function Home() {
                   if (connection) {
                     toastSuccess("Initialized Mirai Connection");
                     setMiraiConnection(connection);
+
+                    if (window !== undefined && typeof window !== "undefined") {
+                      window.localStorage.setItem("accessToken", accessToken);
+                    }
                   }
                 } else {
                   toastError("Not found access token");
