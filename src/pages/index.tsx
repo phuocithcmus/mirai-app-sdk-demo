@@ -39,10 +39,6 @@ export type RpcMethod =
   | "eth_signTypedData_v3"
   | "eth_signTypedData_v4"
   | "wallet_switchEthereumChain"
-  // | 'wallet_addEthereumChain'
-  // | 'wallet_getPermissions'
-  // | 'wallet_requestPermissions'
-  // | 'wallet_registerOnboarding'
   | "eth_chainId";
 
 export const parseUserInfoFromAccessToken = async (
@@ -89,102 +85,9 @@ export default function Home() {
   const [method, setMethod] = useState<RpcMethod>("personal_sign");
   const [params, setParams] = useState<string>('[{"chainId": "0x38"}]');
 
+  const [chain_switch, setChainSwitch] = useState<string | null>(null);
+
   const web3Modal = useRef<MiraiWeb3Modal | null>(null);
-
-  // const socket = io("https://dev-sign-provider.miraiid.io", {
-  //   autoConnect: false,
-  //   reconnection: false,
-  //   transports: ["websocket"],
-  //   upgrade: true,
-  //   withCredentials: true,
-  //   auth: {
-  //     authorization: accessToken,
-  //   },
-  // });
-
-  // socket.on("connect", () => {
-  //   console.log("connected");
-  //   toast.success(`WS connected - id: ${socket.id}`);
-  //   setSocketId(`ws connected: id: ${socket.id}`);
-
-  //   setQrCode("");
-  //   setUri("");
-  //   setTopicId("");
-  //   setMessage("");
-  //   setIsConnectting(false);
-  // });
-
-  // socket.on("disconnect", (reason) => {
-  //   console.log("disconnected", reason);
-  //   setIsConnectting(false);
-
-  //   toast.error(`WS disconnected - Reason: ${reason}`);
-
-  //   setMessage(`ws disconnected: reason: ${reason}`);
-  // });
-
-  // socket.on("socket-event", async (received: any) => {
-  //   console.log("received", received);
-  //   const { type, payload } = received;
-
-  //   if (type === "uri") {
-  //     console.log("uri", payload);
-
-  //     toast.success(`New URI received - uri: ${payload}`, {
-  //       style: {
-  //         wordBreak: "break-all",
-  //       },
-  //     });
-
-  //     setUri(payload);
-  //     setQrCode(await QRCode.toDataURL(payload));
-  //   }
-
-  //   if (type === "topic") {
-  //     console.log("topic", payload);
-  //     toast.success(`New topic received - topic: ${payload}`, {
-  //       style: {
-  //         wordBreak: "break-all",
-  //       },
-  //     });
-
-  //     setTopicId(payload);
-  //   }
-
-  //   if (type === "error-topic") {
-  //     console.log("error-topic", payload);
-
-  //     toast.error(`error-topic - message: ${payload}`, {
-  //       style: {
-  //         wordBreak: "break-all",
-  //       },
-  //     });
-  //     setMessage(payload);
-  //   }
-
-  //   if (type === "error") {
-  //     console.log("error", payload);
-  //     setMessage(payload);
-
-  //     toast.error(`error - message: ${payload}`, {
-  //       style: {
-  //         wordBreak: "break-all",
-  //       },
-  //     });
-
-  //     setIsConnectting(false);
-  //   }
-
-  //   if (type === "response") {
-  //     console.log("error", payload);
-  //     toast.success(`Received message: ${payload}`, {
-  //       style: {
-  //         wordBreak: "break-all",
-  //       },
-  //     });
-  //     setMessage(payload);
-  //   }
-  // });
 
   const toastSuccess = (msg: string) => {
     toast.success(msg, {
@@ -202,25 +105,6 @@ export default function Home() {
     });
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (accessToken) {
-  //       const miraiInfo = await parseUserInfoFromAccessToken(accessToken);
-
-  //       console.log(miraiInfo);
-  //       if (!miraiInfo) {
-  //         socket.disconnect();
-  //       }
-
-  //       if (miraiInfo) {
-  //         const { sub, aud } = miraiInfo;
-  //         const internalTopicId = calculateRoomId(sub, aud);
-  //         setSocketRoomId(internalTopicId);
-  //       }
-  //     }
-  //   })();
-  // }, [accessToken]);
-
   // FOR SDK CLIENT
 
   useEffect(() => {
@@ -230,7 +114,7 @@ export default function Home() {
           clientId: "a0bac604-0fa4-447a-a3de-4deff02008c4",
           chainNameSpace: "eip155",
           chains: ["0x38", "0x1"],
-          defaultChainId: "0x38",
+          // defaultChainId: "0x38",
           metaData: {
             name: "Mirai App",
             description: "Mirai App",
@@ -269,24 +153,8 @@ export default function Home() {
 
         web3Modal.current = web3modal;
       }
-
-      // setWcUri(await QRCode.toDataURL(uri));
     }
   };
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (provider) {
-  //       const chainId = (await provider.request({
-  //         method: "eth_chainId",
-  //       })) as string;
-  //       const account = await provider.enable();
-
-  //       setAccount(account[0]);
-  //       setChainId(chainId);
-  //     }
-  //   })();
-  // }, [provider]);
   // FOR SDK CLIENT
 
   useEffect(() => {
@@ -436,20 +304,6 @@ export default function Home() {
       <p>Message: {message}</p>
       {account && <p>Account: {account}</p>}
       {chainId && <p>ChainId: {chainId}</p>}
-      {/* <div>
-        <label htmlFor="id-chain">ChainId: </label>
-        <input
-          id="id-chain"
-          value={chainIdConnect}
-          style={{ marginBottom: "20px" }}
-          type="text"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Chain Id for connecting"
-          onChange={(evt) => {
-            setChainIdConnect(evt.target.value);
-          }}
-        />
-      </div> */}
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
         <a
           style={{ wordBreak: "break-word" }}
@@ -457,10 +311,6 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {/* <h2 className={`mb-3 text-2xl font-semibold`}>
-            Account:
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>{account}</p> */}
           {qrcode && <img src={qrcode} alt="qrcode" />}
         </a>
         <div>
@@ -478,16 +328,6 @@ export default function Home() {
                   </>
                 )}
               </div>
-              {/* <input
-                value={chainId}
-                style={{ marginBottom: "20px" }}
-                type="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="ChainId"
-                onChange={(evt) => {
-                  setChainId(evt.target.value);
-                }}
-              /> */}
               <input
                 value={method}
                 type="text"
@@ -513,18 +353,6 @@ export default function Home() {
         </div>
       </div>
       <div className="relative flex place-items-center ">
-        {/* <button
-          data-modal-target="defaultModal"
-          data-modal-toggle="defaultModal"
-          className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          type="button"
-          onClick={async () => {
-            setIsConnectting(true);
-            socket.connect();
-          }}
-        >
-          {isConnectting ? "Connectting" : "Connect"}
-        </button> */}
         {(socketId || qrcode) && (
           <>
             {socketId && (
@@ -634,31 +462,34 @@ export default function Home() {
         {miraiConnection && (
           <>
             {status === "approved" && (
-              <button
-                data-modal-target="defaultModal"
-                data-modal-toggle="defaultModal"
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-                style={{ marginLeft: "10px" }}
-                onClick={async () => {
-                  setIsLoadingModal(true);
+              <>
+                <button
+                  data-modal-target="defaultModal"
+                  data-modal-toggle="defaultModal"
+                  className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  type="button"
+                  style={{ marginLeft: "10px" }}
+                  onClick={async () => {
+                    setIsLoadingModal(true);
 
-                  try {
-                    const response = await provider?.request({
-                      method: method as RpcMethod,
-                      params: JSON.parse(params),
-                    });
+                    try {
+                      const response = await provider?.request({
+                        method: method as RpcMethod,
+                        params: JSON.parse(params),
+                      });
 
-                    setMessage(response as string);
-                  } catch (e) {
-                    toastError(e as string);
-                  } finally {
-                    setIsLoadingModal(false);
-                  }
-                }}
-              >
-                {isLoadingModal ? "watting..." : "Request"}
-              </button>
+                      setMessage(response as string);
+                    } catch (e: any) {
+                      const error = JSON.parse(e.message);
+                      toastError(error.message);
+                    } finally {
+                      setIsLoadingModal(false);
+                    }
+                  }}
+                >
+                  {isLoadingModal ? "watting..." : "Request"}
+                </button>
+              </>
             )}
           </>
         )}
