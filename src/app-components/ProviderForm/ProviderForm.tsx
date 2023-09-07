@@ -33,7 +33,7 @@ const toastError = (msg: string) => {
 const ProviderForm = (props: IProviderForm) => {
   const [sending, setSending] = useState<boolean>(false);
   const [method, setMethod] = useState<string>("personal_sign");
-  const [params, setParams] = useState<string>('[{"chainId": "0x38"}]');
+  const [params, setParams] = useState<string | null>(null);
   const [response, setResponse] = useState<string>("");
 
   const getDefaultParamsByMethod = (method: string) => {
@@ -106,6 +106,7 @@ const ProviderForm = (props: IProviderForm) => {
             label="Method"
             value={method}
             onChange={(evt) => {
+              setParams(null);
               setMethod(evt.target.value);
             }}
             autoWidth
@@ -143,7 +144,7 @@ const ProviderForm = (props: IProviderForm) => {
             }}
           /> */}
           <TextField
-            value={getDefaultParamsByMethod(method)}
+            value={params || getDefaultParamsByMethod(method)}
             style={{ width: "100%", margin: "5px" }}
             type="text"
             label="Params"
@@ -182,14 +183,17 @@ const ProviderForm = (props: IProviderForm) => {
           onClick={async () => {
             try {
               setSending(true);
-              const response = await props.provider?.request({
-                method: method as RpcMethod,
-                params: JSON.parse(params),
-              });
 
-              setResponse(JSON.stringify(response));
+              if (params) {
+                const response = await props.provider?.request({
+                  method: method as RpcMethod,
+                  params: JSON.parse(params),
+                });
 
-              toastSuccess("Send successfully");
+                setResponse(JSON.stringify(response));
+
+                toastSuccess("Send successfully");
+              }
             } catch (e: any) {
               toastError(e.message);
             } finally {

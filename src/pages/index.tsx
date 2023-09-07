@@ -213,8 +213,6 @@ const Home = () => {
       console.log("miraiCore.connections", await miraiCore.getAllConnection());
       const connections = Object.values(miraiCore.connections);
 
-      console.log("connections", connections);
-
       if (window !== undefined && typeof window !== "undefined") {
         window.localStorage.setItem(
           "connections",
