@@ -43,21 +43,23 @@ const ProviderForm = (props: IProviderForm) => {
       case "personal_sign":
         return JSON.stringify(["test", "your account"]);
       case "wallet_addEthereumChain":
-        return JSON.stringify({
-          chainId: "0x64",
-          chainName: "Gnosis",
-          rpcUrls: ["https://rpc.ankr.com/gnosis"],
-          iconUrls: [
-            "https://xdaichain.com/fake/example/url/xdai.svg",
-            "https://xdaichain.com/fake/example/url/xdai.png",
-          ],
-          nativeCurrency: {
-            name: "xDAI",
-            symbol: "xDAI",
-            decimals: 18,
+        return JSON.stringify([
+          {
+            chainId: "0x64",
+            chainName: "Gnosis",
+            rpcUrls: ["https://rpc.ankr.com/gnosis"],
+            iconUrls: [
+              "https://xdaichain.com/fake/example/url/xdai.svg",
+              "https://xdaichain.com/fake/example/url/xdai.png",
+            ],
+            nativeCurrency: {
+              name: "xDAI",
+              symbol: "xDAI",
+              decimals: 18,
+            },
+            blockExplorerUrls: ["https://blockscout.com/poa/xdai/"],
           },
-          blockExplorerUrls: ["https://blockscout.com/poa/xdai/"],
-        });
+        ]);
       case "wallet_switchEthereumChain":
         return JSON.stringify([
           {

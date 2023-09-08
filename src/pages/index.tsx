@@ -173,24 +173,15 @@ const Home = () => {
       }[];
 
       if (conns) {
-        conns.forEach((conn) => {
-          setConnectionRows((conns) => {
-            const has = conns.findIndex((c) => c.id === conn.id) > -1;
-
-            if (!has) {
-              return [
-                ...conns,
-                {
-                  id: conn.id,
-                  userId: conn.userId,
-                  action: "",
-                },
-              ];
-            }
-
-            return [...conns];
-          });
-        });
+        setConnectionRows(
+          conns.map((conn) => {
+            return {
+              id: conn.id,
+              userId: conn.userId,
+              action: "",
+            };
+          })
+        );
       }
     }
   }, []);
@@ -231,24 +222,15 @@ const Home = () => {
       if (connections.length === 0) {
         setConnectionRows([]);
       } else {
-        connections.forEach((conn) => {
-          setConnectionRows((conns) => {
-            const has = conns.findIndex((c) => c.id === conn.topicId) > -1;
-
-            if (!has) {
-              return [
-                ...conns,
-                {
-                  id: conn.topicId,
-                  userId: conn.accessToken,
-                  action: "",
-                },
-              ];
-            }
-
-            return [...conns];
-          });
-        });
+        setConnectionRows(
+          connections.map((conn) => {
+            return {
+              id: conn.topicId,
+              userId: conn.accessToken,
+              action: "",
+            };
+          })
+        );
       }
     }
   };
@@ -266,11 +248,11 @@ const Home = () => {
     }
   }, [miraiCore]);
 
-  useEffect(() => {
-    (async () => {
-      await refectchConn();
-    })();
-  }, [miraiCore]);
+  // useEffect(() => {
+  //   (async () => {
+  //     await refectchConn();
+  //   })();
+  // }, [miraiCore]);
 
   return (
     <StyledEngineProvider injectFirst>
