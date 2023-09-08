@@ -144,7 +144,7 @@ const ProviderForm = (props: IProviderForm) => {
             }}
           /> */}
           <TextField
-            value={params || getDefaultParamsByMethod(method)}
+            value={params === null ? getDefaultParamsByMethod(method) : params}
             style={{ width: "100%", margin: "5px" }}
             type="text"
             label="Params"
@@ -184,16 +184,14 @@ const ProviderForm = (props: IProviderForm) => {
             try {
               setSending(true);
 
-              if (params) {
-                const response = await props.provider?.request({
-                  method: method as RpcMethod,
-                  params: JSON.parse(params),
-                });
+              const response = await props.provider?.request({
+                method: method as RpcMethod,
+                params: params ? JSON.parse(params) : null,
+              });
 
-                setResponse(JSON.stringify(response));
+              setResponse(JSON.stringify(response));
 
-                toastSuccess("Send successfully");
-              }
+              toastSuccess("Send successfully");
             } catch (e: any) {
               toastError(e.message);
             } finally {
