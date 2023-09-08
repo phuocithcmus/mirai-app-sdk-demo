@@ -4,7 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button, MenuItem, Select, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MiraiSignProvider, RpcMethod } from "@mirailabs-co/miraiid-js";
 import { toast } from "react-hot-toast";
 
@@ -76,6 +76,12 @@ const ProviderForm = (props: IProviderForm) => {
         break;
     }
   };
+
+  useEffect(() => {
+    setParams(
+      params === null ? getDefaultParamsByMethod(method) ?? null : params
+    );
+  }, [method]);
 
   return (
     <Dialog open={props.isOpen} onClose={props.onClose}>
@@ -183,6 +189,8 @@ const ProviderForm = (props: IProviderForm) => {
           onClick={async () => {
             try {
               setSending(true);
+
+              console.log(params ? JSON.parse(params) : null);
 
               const response = await props.provider?.request({
                 method: method as RpcMethod,
