@@ -256,13 +256,16 @@ const Home = () => {
 
   return (
     <StyledEngineProvider injectFirst>
-      <ProviderForm
-        provider={provider}
-        isOpen={openModalRequest}
-        onClose={() => {
-          setOpenModalRequest(false);
-        }}
-      />
+      {openModalRequest && (
+        <ProviderForm
+          provider={provider}
+          isOpen={openModalRequest}
+          onClose={() => {
+            setOpenModalRequest(false);
+          }}
+        />
+      )}
+
       <ModalConnect
         open={open}
         handleClose={handleClose}
