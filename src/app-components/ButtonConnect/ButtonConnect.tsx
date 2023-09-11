@@ -50,7 +50,7 @@ const ButtonConnect = (props: IButtonConnect) => {
       try {
         setLoading(true);
         const conn = await props.reconnect(props.accessToken);
-
+        console.log("isMobile()", isMobile());
         if (isMobile() && conn?.wcTopicId) {
           window.open(
             `http://id-web-local.mirailabs.co/sign?w=${encodeURIComponent(
