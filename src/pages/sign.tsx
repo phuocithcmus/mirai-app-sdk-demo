@@ -1,59 +1,44 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef, useState } from "react";
-import QRCode from "qrcode";
+import React, { useEffect, useState } from "react";
+import { MiraiWeb3Modal } from "@mirailabs-co/mirai-web3-modal";
 import { useRouter } from "next/router";
-import { ModalMobileQR } from "@/app-components/sign/ModalMobileQR/ModalMobileQR";
+import { CoreUtil } from "@/utils/CoreUtils";
+import { Button } from "@mui/material";
 
-const SignPage = () => {
-  const [qrcode, setQrCode] = useState<string>("");
-  const [topicId, setTopicId] = useState<string>("");
+const web3modal = new MiraiWeb3Modal();
 
+const MiraiSignPage = () => {
   const router = useRouter();
+  const [uri, setUri] = useState<string | null>(null);
 
   useEffect(() => {
-    (async () => {
-      console.log(router.asPath);
-      const origin =
-        typeof window !== "undefined" && window.location.origin
-          ? window.location.origin
-          : "";
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get("w");
 
-      console.log(`${origin}${router.asPath}`);
-      const urlr = new URL(`${origin}${router.asPath}`);
-      console.log(urlr.searchParams.get("wc_uri"));
-      if (urlr && urlr.searchParams && urlr.searchParams.get("wc_uri")) {
-        const qr = await QRCode.toDataURL(
-          urlr?.searchParams?.get("wc_uri") as string
-        );
-        setTopicId(urlr.searchParams.get("topicId") as string);
-        setQrCode(qr);
-      }
-    })();
+    setUri(myParam as string);
   }, []);
 
   // useEffect(() => {
-  //     // get the URL parameters which will include the auth token
-  //     const params = window.location.search;
-  //     if (window.opener) {
-  //         // send them to the opening window
-  //         window.opener.postMessage(params, '*');
-  //         // close the popup
-  //         window.close();
+  //     if (uri) {
+  //         web3modal.openModal({ uri });
   //     }
-  // });
+  // }, [uri]);
 
-  useEffect(() => {
-    window.addEventListener("beforeunload", () => {
-      if (window.opener) {
-        // send them to the opening window
-        window.opener.postMessage({ event: "window_closed" }, "*");
-        // close the popup
-        window.close();
-      }
-    });
-  }, []);
-
-  return <ModalMobileQR id={topicId} qr={qrcode} onClose={() => {}} />;
+  return (
+    <>
+      {uri && (
+        <Button
+          style={{ marginLeft: "8px" }}
+          onClick={async () => {
+            const nativeUrl = CoreUtil.formatNativeUrl("metamask://", uri);
+            if (nativeUrl) {
+              router.push(nativeUrl);
+            }
+          }}
+          variant="contained"
+        ></Button>
+      )}
+    </>
+  );
 };
 
-export default SignPage;
+export default MiraiSignPage;

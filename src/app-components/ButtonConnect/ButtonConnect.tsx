@@ -50,14 +50,6 @@ const ButtonConnect = (props: IButtonConnect) => {
       try {
         setLoading(true);
         const conn = await props.reconnect(props.accessToken);
-        console.log("isMobile()", isMobile(), conn?.wcTopicId);
-        if (isMobile() && conn) {
-          const uri = await props.onShowModal(conn);
-
-          if (uri) {
-            setWcUri(uri);
-          }
-        }
         setMiraiConnection(conn);
       } catch (e: any) {
         toastError(e);
@@ -66,14 +58,6 @@ const ButtonConnect = (props: IButtonConnect) => {
       }
     })();
   }, []);
-
-  useEffect(() => {
-    if (wcUri) {
-      window.open(
-        `http://id-web-local.mirailabs.co/sign?w=${encodeURIComponent(wcUri)}`
-      );
-    }
-  }, [wcUri]);
 
   useEffect(() => {
     (async () => {
@@ -165,13 +149,17 @@ const ButtonConnect = (props: IButtonConnect) => {
             if (miraiConnection) {
               const uri = await props.onShowModal(miraiConnection);
               if (uri) {
-                const web3modal = new MiraiWeb3Modal();
-                if (web3modal) {
-                  await web3modal.openModal({
-                    uri,
-                  });
+                if (!isMobile()) {
+                  const web3modal = new MiraiWeb3Modal();
+                  if (web3modal) {
+                    await web3modal.openModal({
+                      uri,
+                    });
 
-                  web3Modal.current = web3modal;
+                    web3Modal.current = web3modal;
+                  }
+                } else {
+                  window.open(`/sign?w=${encodeURIComponent(uri)}`);
                 }
               }
             } else {
