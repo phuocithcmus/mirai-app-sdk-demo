@@ -55,11 +55,7 @@ const ButtonConnect = (props: IButtonConnect) => {
           const uri = await props.onShowModal(conn);
 
           if (uri) {
-            window.open(
-              `http://id-web-local.mirailabs.co/sign?w=${encodeURIComponent(
-                uri
-              )}`
-            );
+            setWcUri(uri);
           }
         }
         setMiraiConnection(conn);
@@ -70,6 +66,14 @@ const ButtonConnect = (props: IButtonConnect) => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (wcUri) {
+      window.open(
+        `http://id-web-local.mirailabs.co/sign?w=${encodeURIComponent(wcUri)}`
+      );
+    }
+  }, [wcUri]);
 
   useEffect(() => {
     (async () => {
@@ -87,7 +91,6 @@ const ButtonConnect = (props: IButtonConnect) => {
             setStatus("approved");
 
             await web3Modal.current?.closeModal();
-            setWcUri(null);
           })
           .on("rejected", async ({ message }) => {
             await web3Modal.current?.closeModal();
@@ -170,8 +173,6 @@ const ButtonConnect = (props: IButtonConnect) => {
 
                   web3Modal.current = web3modal;
                 }
-
-                setWcUri(uri);
               }
             } else {
               await props.reconnect(props.accessToken);
