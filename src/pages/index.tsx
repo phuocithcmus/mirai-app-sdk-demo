@@ -6,13 +6,17 @@ import { Button } from "@mui/material";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import {
+  IAuthClient,
+  AuthClient,
   MiraiConnection,
   MiraiSignCore,
   MiraiSignProvider,
+  AuthEngineTypes,
 } from "@mirailabs-co/miraiid-js";
 import ModalConnect from "@/app-components/ModalConnect/ModalConnect";
 import ButtonConnect from "@/app-components/ButtonConnect/ButtonConnect";
 import ProviderForm from "@/app-components/ProviderForm/ProviderForm";
+import axios, { isCancel, AxiosError } from "axios";
 
 function start_and_end(str: string) {
   if (str) {
@@ -33,6 +37,7 @@ const Home = () => {
   const [miraiCore, setMiraiCore] = useState<MiraiSignCore | null>(null);
 
   const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
+  const [auth_client, setAuthClient] = useState<IAuthClient | null>(null);
 
   const [connectionRows, setConnectionRows] = useState<
     {
@@ -139,7 +144,7 @@ const Home = () => {
     (async () => {
       try {
         const miraiCore = await MiraiSignCore.init({
-          clientId: "a0bac604-0fa4-447a-a3de-4deff02008c4",
+          clientId: "24f0da89-b26f-492f-9818-4f0ab4fcdfe7",
           chainNameSpace: "eip155",
           chains: ["0x38", "0x1"],
           // defaultChainId: "0x38",
@@ -248,11 +253,40 @@ const Home = () => {
     }
   }, [miraiCore]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await refectchConn();
-  //   })();
-  // }, [miraiCore]);
+  useEffect(() => {
+    (async () => {
+      // Initialize client make
+      const client = await AuthClient.init({
+        name: "mirai app test sdk",
+        mode: "development",
+        clientId: "24f0da89-b26f-492f-9818-4f0ab4fcdfe7",
+        authorizationCallbackFunc: async ({ code, state }) => {
+          // perform with code, state here
+          console.log(code, state);
+
+          const { data } = await axios.post(
+            "https://id-dev-v2.mirailabs.co/api/oauth2/token",
+            {
+              grant_type: "authorization_code",
+              code,
+              state,
+              client_id: "24f0da89-b26f-492f-9818-4f0ab4fcdfe7",
+              client_secret:
+                "989fe6b39748cfd674ba170cfe583db63ea638e2d9597745718e44be27cbc0c7",
+              scope: "profile",
+            }
+          );
+
+          console.log("data", data);
+        },
+        autoStart: false, // Default: false, set "true" if you need automatic start after 'init' done
+      });
+
+      await client.start();
+
+      setAuthClient(client);
+    })();
+  }, [miraiCore]);
 
   return (
     <StyledEngineProvider injectFirst>
@@ -305,7 +339,26 @@ const Home = () => {
           }}
           spacing={2}
         >
-          <Button onClick={handleClickOpen} variant="contained">
+          <Button
+            onClick={async () => {
+              if (auth_client) {
+                // make the authorization request
+                await auth_client.request({
+                  redirect_uri: "https://mirai-app-sdk-demo.vercel.app",
+                  code_challenge_method: "S256",
+                  origin: "https://mirai-app-sdk-demo.vercel.app",
+                } as AuthEngineTypes.RequestParams);
+              }
+            }}
+            variant="contained"
+          >
+            Login
+          </Button>
+          <Button
+            style={{ marginLeft: "8px" }}
+            onClick={handleClickOpen}
+            variant="contained"
+          >
             New Connection
           </Button>
         </Grid>
