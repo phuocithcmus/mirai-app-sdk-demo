@@ -359,16 +359,18 @@ const Home = () => {
           >
             Login another user
           </Button>
-          <Button
-            disabled={isFetchingUser}
-            style={{ marginLeft: "8px" }}
-            onClick={handleClickOpen}
-            variant="contained"
-          >
-            {isFetchingUser
-              ? "fetching mirai user ..."
-              : ` New Connection ${userId && `- ${userId}`}`}
-          </Button>
+          {(userId || isFetchingUser) && (
+            <Button
+              disabled={isFetchingUser}
+              style={{ marginLeft: "8px" }}
+              onClick={handleClickOpen}
+              variant="contained"
+            >
+              {isFetchingUser
+                ? "fetching mirai user ..."
+                : ` New Connection ${userId && `- ${userId}`}`}
+            </Button>
+          )}
         </Grid>
 
         <Grid
