@@ -274,6 +274,7 @@ const Home = () => {
               client_secret:
                 "989fe6b39748cfd674ba170cfe583db63ea638e2d9597745718e44be27cbc0c7",
               scope: "profile",
+              redirect_uri: "https://mirai-app-sdk-demo.vercel.app",
             }
           );
 
