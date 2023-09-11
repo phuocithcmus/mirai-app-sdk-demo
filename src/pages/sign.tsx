@@ -14,6 +14,8 @@ const MiraiSignPage = () => {
     const myParam = urlParams.get("w");
 
     setUri(myParam as string);
+
+    alert("loaded");
   }, []);
 
   useEffect(() => {

@@ -187,7 +187,7 @@ const ButtonConnect = (props: IButtonConnect) => {
                     web3Modal.current = web3modal;
                   }
                 } else {
-                  openTab(`/sign?w=${encodeURIComponent(uri)}`);
+                  window.location.assign(`/sign?w=${encodeURIComponent(uri)}`);
                 }
               }
             } else {
