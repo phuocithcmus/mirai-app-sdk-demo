@@ -1,20 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
+import jwt_decode from "jwt-decode";
 
 export interface IModalConnect {
   open: boolean;
+  accessToken: string | null;
   handleClose: () => void;
   handleConnect: (accessToken: string) => Promise<void>;
 }
 
 const ModalConnect = (props: IModalConnect) => {
   const [connecting, setConnecting] = useState<boolean>(false);
-  const [accessToken, setAccessToken] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
+  useEffect(() => {
+    if (props.accessToken) {
+      const { sub } = jwt_decode(props.accessToken) as { sub: string };
+      setUserId(sub);
+    }
+  }, [props.accessToken]);
 
   return (
     <Dialog open={props.open} onClose={props.handleClose}>
@@ -23,20 +31,16 @@ const ModalConnect = (props: IModalConnect) => {
         {/* <DialogContentText>
           To open new mirai connection, please enter your miraiid access token.
         </DialogContentText> */}
-        <TextField
-          style={{ width: "100%", margin: "5px" }}
-          multiline
-          value={accessToken}
-          autoFocus
-          id="name"
-          label="Access Token"
-          fullWidth
-          variant="standard"
-          onChange={(evt) => {
-            setAccessToken(evt.target.value);
-          }}
-          required={true}
-        />
+        <form style={{ minWidth: "500px" }}>
+          <TextField
+            disabled
+            value={userId}
+            style={{ width: "100%", margin: "5px" }}
+            type="text"
+            label="Account"
+            variant="outlined"
+          />
+        </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={props.handleClose}>Cancel</Button>
@@ -46,7 +50,9 @@ const ModalConnect = (props: IModalConnect) => {
           onClick={async () => {
             try {
               setConnecting(true);
-              await props.handleConnect(accessToken);
+              if (props.accessToken) {
+                await props.handleConnect(props.accessToken);
+              }
             } finally {
               setConnecting(false);
             }

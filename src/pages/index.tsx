@@ -17,6 +17,7 @@ import ModalConnect from "@/app-components/ModalConnect/ModalConnect";
 import ButtonConnect from "@/app-components/ButtonConnect/ButtonConnect";
 import ProviderForm from "@/app-components/ProviderForm/ProviderForm";
 import axios, { isCancel, AxiosError } from "axios";
+import jwt_decode from "jwt-decode";
 
 function start_and_end(str: string) {
   if (str) {
@@ -38,6 +39,8 @@ const Home = () => {
 
   const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
   const [auth_client, setAuthClient] = useState<IAuthClient | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const [connectionRows, setConnectionRows] = useState<
     {
@@ -270,6 +273,11 @@ const Home = () => {
           );
 
           console.log("access_token", data.access_token);
+
+          setAccessToken(data.access_token);
+
+          const { sub } = jwt_decode(data.access_token) as { sub: string };
+          setUserId(sub);
         },
         autoStart: false, // Default: false, set "true" if you need automatic start after 'init' done
       });
@@ -293,6 +301,8 @@ const Home = () => {
       )}
 
       <ModalConnect
+        accessToken={accessToken}
+        // accessToken="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIyNGYwZGE4OS1iMjZmLTQ5MmYtOTgxOC00ZjBhYjRmY2RmZTciLCJqdGkiOiJmZjQ3MDk0Ni1lN2IxLTQ1MDgtYTk4NS02ZmY5ZGJiYjMwMTciLCJleHAiOjE2OTQ0OTMwMzEsInN1YiI6ImJmYjRmZmY2LWUzMTQtNDI2OS1iYTAyLWRmYzU5MTk1MzRjZiIsInNjb3BlcyI6WyJwcm9maWxlIl0sImVtYWlsIjoiZHVjcGh1b2MudDlAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJQaMaw4bubYyBOZ3V54buFbiDEkOG7qWMiLCJnaXZlbl9uYW1lIjoiUGjGsOG7m2MiLCJmYW1pbHlfbmFtZSI6Ik5ndXnhu4VuIMSQ4bupYyIsImlzcyI6Imh0dHBzOi8vaWQtZGV2LXYyLm1pcmFpbGFicy5jbyIsImF6cCI6IjI0ZjBkYTg5LWIyNmYtNDkyZi05ODE4LTRmMGFiNGZjZGZlNyIsImlhdCI6MTY5NDQwNjYzMX0.G12P9qQ0oNT7HJ344jf0sd3sEXr4Y1W4HkFmvgc2SvPnIOCw-xttiur1I9N4Wn9uf5igw8m0kfQqTBu-gQAh4kTKeWAt9w3PpFV_P3fFUqsMV-KENadv1mDVLts0yDkVn6o5uek8hHWFpUaYXY8iRcCkaONBq7Btb4nILltxx_g_kWJ2EP69aavlYajIFtHIIqW6qfJ7FMdYR7ShZFYU3SHeZBCDd3XxNJtiS99--TU9xMMaAWzQ4xT8SW4U0P0DXKFnXr8i2Dm1xIFFVaEiU44UYk8gKjyT3bDYQqBoz46rdLm4capPBUYP3aUsTH4C9CILlwleUiVG1pvTzI3awuGMRHywj_kNlzXp91J6DYUZYrhrRE3B57804a45MN91a-1yw0hGr67ffTO-9dwuGNkRFFivsLB0bdNap93kvHhVjbcGF_UVJvT_MSMgeh_yPreCNDI7fjVSYOJU1PrqIYcG2UnT4fWh1hss6Ynrlj27DVs3Sgrhx-K4AcSo8mM3EvKeij2o3_fRQcdcz4ANS0lt3FF7eU_WOcuVGpWwVZhUffCYpmwq7VIlgUQWkqkCIINI5LTHVQTE89zfJREetTep6DEp1xRC01Jj6hNkYrtZnZpywg0zJG1vzQqFdGHFy1gR5me5WU_KeKbNKaRwuQ0pzfLz_Qk-nhS7FYo8s8Q"
         open={open}
         handleClose={handleClose}
         handleConnect={async (accessToken: string) => {
@@ -342,16 +352,16 @@ const Home = () => {
                 } as AuthEngineTypes.RequestParams);
               }
             }}
-            variant="contained"
+            variant="outlined"
           >
-            Login
+            Login another user
           </Button>
           <Button
             style={{ marginLeft: "8px" }}
             onClick={handleClickOpen}
             variant="contained"
           >
-            New Connection
+            New Connection - {userId}
           </Button>
         </Grid>
 
