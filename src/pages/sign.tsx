@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MiraiWeb3Modal } from "@mirailabs-co/mirai-web3-modal";
 import { useRouter } from "next/router";
-import { CoreUtil } from "@/utils/CoreUtils";
 import { Button } from "@mui/material";
 
 const web3modal = new MiraiWeb3Modal();
@@ -17,28 +16,13 @@ const MiraiSignPage = () => {
     setUri(myParam as string);
   }, []);
 
-  // useEffect(() => {
-  //     if (uri) {
-  //         web3modal.openModal({ uri });
-  //     }
-  // }, [uri]);
+  useEffect(() => {
+    if (uri) {
+      web3modal.openModal({ uri });
+    }
+  }, [uri]);
 
-  return (
-    <>
-      {uri && (
-        <Button
-          style={{ marginLeft: "8px" }}
-          onClick={async () => {
-            const nativeUrl = CoreUtil.formatNativeUrl("metamask://", uri);
-            if (nativeUrl) {
-              router.push(nativeUrl);
-            }
-          }}
-          variant="contained"
-        ></Button>
-      )}
-    </>
-  );
+  return <></>;
 };
 
 export default MiraiSignPage;

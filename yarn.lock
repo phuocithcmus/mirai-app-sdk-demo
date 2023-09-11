@@ -804,10 +804,10 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
-"@mirailabs-co/mirai-web3-modal@^0.1.6":
-  version "0.1.6"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.1.6/1d318a528bbec92167131a264893c90d7f946501#1d318a528bbec92167131a264893c90d7f946501"
-  integrity sha512-JsrAXDD3sq1/xfO2Lqdtu4xYY/VFKMAaQ+eipaE/K6yFI/eMlMxS7AmfoVAnVczCDF9K3uMxsypK3aOGBtZDaQ==
+"@mirailabs-co/mirai-web3-modal@^0.2.9":
+  version "0.2.9"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.2.9/7524235a0bb51f6c93440968c39defd831b6ff36#7524235a0bb51f6c93440968c39defd831b6ff36"
+  integrity sha512-qWLfKjIqxPELHmqXZfUZxwz5cbr+LsX7LRkfEPVHoPnISmPsbAObuYzdU1C3m9NtUghIE6RT5JCjUgfdNr9hLg==
   dependencies:
     "@lit-labs/react" "^2.0.1"
     animate.css "^4.1.1"
@@ -817,6 +817,7 @@
     crypto-browserify "^3.12.0"
     ethers "^6.7.1"
     eventemitter3 "^5.0.1"
+    is-mobile "^4.0.0"
     jest "^29.6.3"
     jwt-decode "^3.1.2"
     lit "^2.8.0"
