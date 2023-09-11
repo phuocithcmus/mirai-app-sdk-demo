@@ -51,12 +51,16 @@ const ButtonConnect = (props: IButtonConnect) => {
         setLoading(true);
         const conn = await props.reconnect(props.accessToken);
         console.log("isMobile()", isMobile(), conn?.wcTopicId);
-        if (isMobile() && conn?.wcTopicId) {
-          window.open(
-            `http://id-web-local.mirailabs.co/sign?w=${encodeURIComponent(
-              conn?.wcTopicId
-            )}`
-          );
+        if (isMobile() && conn) {
+          const uri = await props.onShowModal(conn);
+
+          if (uri) {
+            window.open(
+              `http://id-web-local.mirailabs.co/sign?w=${encodeURIComponent(
+                uri
+              )}`
+            );
+          }
         }
         setMiraiConnection(conn);
       } catch (e: any) {
