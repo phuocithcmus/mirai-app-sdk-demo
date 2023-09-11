@@ -4,6 +4,7 @@ import { Button, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
+import isMobile from "is-mobile";
 
 export interface IButtonConnect {
   id: string;
@@ -49,6 +50,14 @@ const ButtonConnect = (props: IButtonConnect) => {
       try {
         setLoading(true);
         const conn = await props.reconnect(props.accessToken);
+
+        if (isMobile() && conn?.wcTopicId) {
+          window.open(
+            `http://id-web-local.mirailabs.co/sign?w=${encodeURIComponent(
+              conn?.wcTopicId
+            )}`
+          );
+        }
         setMiraiConnection(conn);
       } catch (e: any) {
         toastError(e);
