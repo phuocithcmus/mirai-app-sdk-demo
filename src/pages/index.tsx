@@ -41,6 +41,7 @@ const Home = () => {
   const [auth_client, setAuthClient] = useState<IAuthClient | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isFetchingUser, setIsFetchingUser] = useState<boolean>(false);
 
   const [connectionRows, setConnectionRows] = useState<
     {
@@ -266,6 +267,7 @@ const Home = () => {
         authorizationCallbackFunc: async ({ code, state }) => {
           // perform with code, state here
           console.log(code, state);
+          setIsFetchingUser(true);
 
           const { data } = await axios.post(
             `api/auth/token?code=${code}&state=${state}`,
@@ -278,6 +280,7 @@ const Home = () => {
 
           const { sub } = jwt_decode(data.access_token) as { sub: string };
           setUserId(sub);
+          setIsFetchingUser(false);
         },
         autoStart: false, // Default: false, set "true" if you need automatic start after 'init' done
       });
@@ -357,11 +360,14 @@ const Home = () => {
             Login another user
           </Button>
           <Button
+            disabled={isFetchingUser}
             style={{ marginLeft: "8px" }}
             onClick={handleClickOpen}
             variant="contained"
           >
-            New Connection - {userId}
+            {isFetchingUser
+              ? "fetching mirai user ..."
+              : ` New Connection ${userId && `- ${userId}`}`}
           </Button>
         </Grid>
 
