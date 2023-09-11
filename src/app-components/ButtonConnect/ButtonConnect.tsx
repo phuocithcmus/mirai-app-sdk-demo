@@ -159,7 +159,11 @@ const ButtonConnect = (props: IButtonConnect) => {
                     web3Modal.current = web3modal;
                   }
                 } else {
-                  window.open(`/sign?w=${encodeURIComponent(uri)}`);
+                  window.open(
+                    `/sign?w=${encodeURIComponent(uri)}`,
+                    "_blank",
+                    "noopener noreferrer"
+                  );
                 }
               }
             } else {

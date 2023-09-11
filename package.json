@@ -14,7 +14,7 @@
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.6.0",
     "@lit-labs/react": "^2.0.1",
-    "@mirailabs-co/mirai-web3-modal": "^0.2.9",
+    "@mirailabs-co/mirai-web3-modal": "^0.3.6",
     "@mirailabs-co/miraiid-js": "^3.1.0",
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.3",
