@@ -119,6 +119,34 @@ const ButtonConnect = (props: IButtonConnect) => {
       </Box>
     );
 
+  const openTab = (url: string) => {
+    // Create link in memory
+    var a = window.document.createElement("a");
+    a.target = "_blank";
+    a.href = url;
+
+    // Dispatch fake click
+    var e = window.document.createEvent("MouseEvents");
+    e.initMouseEvent(
+      "click",
+      true,
+      true,
+      window,
+      0,
+      0,
+      0,
+      0,
+      0,
+      false,
+      false,
+      false,
+      false,
+      0,
+      null
+    );
+    a.dispatchEvent(e);
+  };
+
   return (
     <>
       {miraiConnection && (
@@ -159,11 +187,7 @@ const ButtonConnect = (props: IButtonConnect) => {
                     web3Modal.current = web3modal;
                   }
                 } else {
-                  window.open(
-                    `/sign?w=${encodeURIComponent(uri)}`,
-                    "_blank",
-                    "noopener noreferrer"
-                  );
+                  openTab(`/sign?w=${encodeURIComponent(uri)}`);
                 }
               }
             } else {
