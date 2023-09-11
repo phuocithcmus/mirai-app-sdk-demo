@@ -265,20 +265,11 @@ const Home = () => {
           console.log(code, state);
 
           const { data } = await axios.post(
-            "https://id-dev-v2.mirailabs.co/api/oauth2/token",
-            {
-              grant_type: "authorization_code",
-              code,
-              state,
-              client_id: "24f0da89-b26f-492f-9818-4f0ab4fcdfe7",
-              client_secret:
-                "989fe6b39748cfd674ba170cfe583db63ea638e2d9597745718e44be27cbc0c7",
-              scope: "profile",
-              redirect_uri: "https://mirai-app-sdk-demo.vercel.app",
-            }
+            `api/auth/token?code=${code}&state=${state}`,
+            {}
           );
 
-          console.log("data", data);
+          console.log("access_token", data.access_token);
         },
         autoStart: false, // Default: false, set "true" if you need automatic start after 'init' done
       });
