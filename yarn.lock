@@ -804,10 +804,10 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
-"@mirailabs-co/mirai-web3-modal@^0.3.9":
-  version "0.3.9"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.3.9/467ce0bb851b26331ee5faaae7c4e947a421a404#467ce0bb851b26331ee5faaae7c4e947a421a404"
-  integrity sha512-Rju2gS9luGMDusvF92JtubWlikn8+sWtFgkd1FNkP0Ao/8xR0XY7JnblSCAn/iRA6AcjK8f1iAuyxb8G1hwtbA==
+"@mirailabs-co/mirai-web3-modal@^0.4.0":
+  version "0.4.0"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.4.0/a26f752f66fef10533b4372ae3a678f19ef6f75c#a26f752f66fef10533b4372ae3a678f19ef6f75c"
+  integrity sha512-zyaiXpu+Z8e3XTJWktgcJ7br0Odh5rdJA5J1aaiLt7TD/LFifayEXa3VgIJnI+yxqmc9tt/T9vznIB/7V6Nuxg==
   dependencies:
     "@lit-labs/react" "^2.0.1"
     animate.css "^4.1.1"
