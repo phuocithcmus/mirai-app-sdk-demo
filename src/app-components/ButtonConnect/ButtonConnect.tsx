@@ -177,17 +177,19 @@ const ButtonConnect = (props: IButtonConnect) => {
             if (miraiConnection) {
               const uri = await props.onShowModal(miraiConnection);
               if (uri) {
-                if (!isMobile()) {
-                  const web3modal = new MiraiWeb3Modal();
-                  if (web3modal) {
-                    await web3modal.openModal({
-                      uri,
-                    });
+                // if (!isMobile()) {
 
-                    web3Modal.current = web3modal;
-                  }
-                } else {
-                  window.location.href = `/sign?w=${encodeURIComponent(uri)}`;
+                // } else {
+                //   window.location.href = `/sign?w=${encodeURIComponent(uri)}`;
+                // }
+
+                const web3modal = new MiraiWeb3Modal();
+                if (web3modal) {
+                  await web3modal.openModal({
+                    uri,
+                  });
+
+                  web3Modal.current = web3modal;
                 }
               }
             } else {
