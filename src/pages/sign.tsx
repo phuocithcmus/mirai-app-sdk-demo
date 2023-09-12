@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MiraiWeb3Modal } from "@mirailabs-co/mirai-web3-modal";
 import { useRouter } from "next/router";
-import { Button } from "@mui/material";
 
 const web3modal = new MiraiWeb3Modal();
 
@@ -14,8 +13,6 @@ const MiraiSignPage = () => {
     const myParam = urlParams.get("w");
 
     setUri(myParam as string);
-
-    alert("loaded");
   }, []);
 
   useEffect(() => {
