@@ -270,6 +270,9 @@ const Home = () => {
         })
         .on("reconnecting", () => {
           toastSuccess("Reconnecting");
+        })
+        .on("reconnected", async (connection) => {
+          await refectchConn();
         });
     }
   }, [miraiCore]);
