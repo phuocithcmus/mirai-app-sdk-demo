@@ -804,6 +804,30 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
+"@mirailabs-co/mirai-web3-modal@^0.1.6":
+  version "0.1.9"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.1.9/39b8eb96b33191d1a8e98fdfe8211080febf2d7b#39b8eb96b33191d1a8e98fdfe8211080febf2d7b"
+  integrity sha512-gbCfYCwvXXKQ9QBF1bNAeghYNR5Zg9PKI96ClVfiWkWsMX9xM+j6brIvzlp1XGBrKJr7kN2nJ7Ed3+sokSLiFg==
+  dependencies:
+    "@lit-labs/react" "^2.0.1"
+    animate.css "^4.1.1"
+    axios "^1.4.0"
+    babel-plugin-react-css-modules "^5.2.6"
+    base64-js "^1.5.1"
+    crypto-browserify "^3.12.0"
+    ethers "^6.7.1"
+    eventemitter3 "^5.0.1"
+    is-mobile "^4.0.0"
+    jest "^29.6.3"
+    jwt-decode "^3.1.2"
+    lit "^2.8.0"
+    lodash "^4.17.21"
+    mobx "^6.10.0"
+    motion "^10.16.2"
+    qrcode "^1.5.3"
+    typescript-plugin-css-modules "^5.0.1"
+    uuid "^9.0.0"
+
 "@mirailabs-co/mirai-web3-modal@^0.4.1":
   version "0.4.1"
   resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.4.1/16cd06ee6f333638bdab9e7aec4e5c4eccfb2a94#16cd06ee6f333638bdab9e7aec4e5c4eccfb2a94"
@@ -828,15 +852,15 @@
     typescript-plugin-css-modules "^5.0.1"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^3.1.0":
-  version "3.1.0"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.1.0/673325751fef13f56f782250e3fa4b479dca050d#673325751fef13f56f782250e3fa4b479dca050d"
-  integrity sha512-0/YEj2wxqyFaCzW3+a3o1Q/o3QFPd/klWB1hJIcf8lSlfSVQV3rbV2a7U5KL5u/IIBMnMyAOBzqD2Hq2REAo1A==
+"@mirailabs-co/miraiid-js@^3.1.9":
+  version "3.1.9"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.1.9/8df3bf33cb857d227d18b2f539c10c0c96c87e8b#8df3bf33cb857d227d18b2f539c10c0c96c87e8b"
+  integrity sha512-28q0LskqAMTBEzUr2b+QDmwfBwzY3M83QGlRRZMGAQRoUdDtEPx87e68rhZ7v4y/Fwf5AanQM3DYJW1ZqpXkgQ==
   dependencies:
+    "@mirailabs-co/mirai-web3-modal" "^0.1.6"
     axios "^1.4.0"
     base64-js "^1.5.1"
     crypto-browserify "^3.12.0"
-    ethers "^6.7.1"
     eventemitter3 "^5.0.1"
     jest "^29.6.3"
     jwt-decode "^3.1.2"

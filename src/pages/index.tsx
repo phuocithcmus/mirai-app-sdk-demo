@@ -169,6 +169,10 @@ const Home = () => {
         console.log(e);
       }
     })();
+
+    return () => {
+      alert("Unmount ne");
+    };
   }, []);
 
   useEffect(() => {
@@ -193,6 +197,10 @@ const Home = () => {
         );
       }
     }
+
+    return () => {
+      alert("Unmount ne");
+    };
   }, []);
 
   const showModal = async (miraiConnection: MiraiConnection) => {
@@ -246,11 +254,11 @@ const Home = () => {
 
   useEffect(() => {
     if (miraiCore) {
-      miraiCore?.on("disconnected", async (connection: MiraiConnection) => {
+      miraiCore?.on("disconnected", async ({ connection, reason }) => {
         if (!connection) {
           toastError("Connected reset ");
         } else {
-          toastError(`Disconnected ${connection.topicId} `);
+          toastError(`Disconnected ${connection.topicId} ${reason}`);
           await refectchConn();
         }
       });
