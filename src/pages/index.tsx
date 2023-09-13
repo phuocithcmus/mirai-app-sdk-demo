@@ -261,6 +261,8 @@ const Home = () => {
           toastError(`Disconnected ${connection.topicId} ${reason}`);
           setAccessToken(null);
           setUserId(null);
+
+          await refectchConn();
         }
       });
     }
