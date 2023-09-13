@@ -852,10 +852,10 @@
     typescript-plugin-css-modules "^5.0.1"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^3.1.9":
-  version "3.1.9"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.1.9/8df3bf33cb857d227d18b2f539c10c0c96c87e8b#8df3bf33cb857d227d18b2f539c10c0c96c87e8b"
-  integrity sha512-28q0LskqAMTBEzUr2b+QDmwfBwzY3M83QGlRRZMGAQRoUdDtEPx87e68rhZ7v4y/Fwf5AanQM3DYJW1ZqpXkgQ==
+"@mirailabs-co/miraiid-js@^3.2.0":
+  version "3.2.0"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.2.0/2795d44419b632a10f1e6afa86ae1abe93fa2ee0#2795d44419b632a10f1e6afa86ae1abe93fa2ee0"
+  integrity sha512-wWc7FsW9hNDTygt0XZ+857jYiZT0TMsD/im0FHKEQAprMrDtvWGt+hRTf4CT7xWqOvMPYIW/6eH+okOf1qKxLw==
   dependencies:
     "@mirailabs-co/mirai-web3-modal" "^0.1.6"
     axios "^1.4.0"
