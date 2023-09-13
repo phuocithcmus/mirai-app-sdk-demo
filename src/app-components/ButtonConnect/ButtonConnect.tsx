@@ -156,7 +156,7 @@ const ButtonConnect = (props: IButtonConnect) => {
           onClick={async () => {
             try {
               setDisconnecting(true);
-              // await miraiConnection.disconnect(false);
+              await miraiConnection.disconnect();
             } catch (e: any) {
               toastError(e.message);
             } finally {
