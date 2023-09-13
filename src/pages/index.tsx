@@ -98,11 +98,13 @@ const Home = () => {
             reconnect={async (accessToken: string) => {
               try {
                 if (accessToken) {
-                  const connection = await miraiCore?.connect({
+                  const connection = (await miraiCore?.connect({
                     accessToken,
-                  });
+                  })) as MiraiConnection;
 
-                  return connection;
+                  if (connection) {
+                    return connection;
+                  }
                 } else {
                   toastError("Not found access token");
                 }
