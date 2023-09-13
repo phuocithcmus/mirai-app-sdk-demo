@@ -897,10 +897,10 @@
     typescript-plugin-css-modules "^5.0.1"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^3.3.7":
-  version "3.3.7"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.3.7/3ced097dd244641f11870169c7e5ac3765252f2f#3ced097dd244641f11870169c7e5ac3765252f2f"
-  integrity sha512-poi5rnnX+nb4dW2XDuNuD4fjhRIT6TnsXYF2hJiq2/rqTaNXz+8U0+fa/5wxig4YBSLU6Xi6vtpt88KWcRtJ5g==
+"@mirailabs-co/miraiid-js@^3.3.8":
+  version "3.3.8"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.3.8/1c4cf18ed584e6fbdfb84d85c2a3aadf2b4efc8f#1c4cf18ed584e6fbdfb84d85c2a3aadf2b4efc8f"
+  integrity sha512-RzPZ61iW3ksJwtAMPsw8zIftD0g/fNnVUKFH8nVuCwUpeC2vuQoRVaUzKuLJq2gp6HPnG1M4MGnBB3BvWYU/8A==
   dependencies:
     "@ethersproject/keccak256" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
