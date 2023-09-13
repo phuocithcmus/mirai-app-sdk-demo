@@ -256,17 +256,21 @@ const Home = () => {
 
   useEffect(() => {
     if (miraiCore) {
-      miraiCore?.on("disconnected", async ({ connection, reason }) => {
-        if (!connection) {
-          toastError("Connected reset ");
-        } else {
-          toastError(`Disconnected ${connection.topicId} ${reason}`);
-          setAccessToken(null);
-          setUserId(null);
+      miraiCore
+        ?.on("disconnected", async ({ connection, reason }) => {
+          if (!connection) {
+            toastError("Connected reset ");
+          } else {
+            toastError(`Disconnected ${connection.topicId} ${reason}`);
+            setAccessToken(null);
+            setUserId(null);
 
-          await refectchConn();
-        }
-      });
+            await refectchConn();
+          }
+        })
+        .on("reconnecting", () => {
+          toastSuccess("Reconnecting");
+        });
     }
   }, [miraiCore]);
 
