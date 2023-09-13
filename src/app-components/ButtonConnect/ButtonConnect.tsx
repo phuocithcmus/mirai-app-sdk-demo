@@ -190,7 +190,8 @@ const ButtonConnect = (props: IButtonConnect) => {
                   );
                   await web3modal.openModal({
                     uri,
-                    redirectUrl: "https://mirai-app-sdk-demo.vercel.app",
+                    redirectUrl:
+                      "safari-https://www.mirai-app-sdk-demo.vercel.app",
                   });
 
                   web3Modal.current = web3modal;
