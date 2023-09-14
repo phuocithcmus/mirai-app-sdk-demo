@@ -42,7 +42,6 @@ const Home = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isFetchingUser, setIsFetchingUser] = useState<boolean>(false);
-  const [isLoadingCore, setIsLoadingCore] = useState<boolean>(true);
   const [connectionRows, setConnectionRows] = useState<
     {
       id: string;
@@ -390,17 +389,14 @@ const Home = () => {
           container
           spacing={2}
         >
-          {!isLoadingCore && (
-            <DataGrid
-              loading={isLoadingCore}
-              autoHeight
-              rows={connectionRows}
-              columns={columns}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-              keepNonExistentRowsSelected
-            />
-          )}
+          <DataGrid
+            autoHeight
+            rows={connectionRows}
+            columns={columns}
+            pageSizeOptions={[5]}
+            disableRowSelectionOnClick
+            keepNonExistentRowsSelected
+          />
         </Grid>
       </Box>
     </StyledEngineProvider>
