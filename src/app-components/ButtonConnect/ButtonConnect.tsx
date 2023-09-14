@@ -15,6 +15,7 @@ export interface IButtonConnect {
   ) => Promise<string | undefined>;
   initMiraiProvider: (provider: MiraiSignProvider) => void;
   showRequestModal: (provider: MiraiSignProvider) => void;
+  connnection: MiraiConnection | null;
 }
 
 const ButtonConnect = (props: IButtonConnect) => {
@@ -27,7 +28,8 @@ const ButtonConnect = (props: IButtonConnect) => {
 
   const [status, setStatus] = useState<"approved" | "rejected" | null>(null);
   const [wcUri, setWcUri] = useState<string | null>(null);
-  const [miraiConnection, setMiraiConnection] = useState<MiraiConnection>();
+  const [miraiConnection, setMiraiConnection] =
+    useState<MiraiConnection | null>(props.connnection);
 
   const toastSuccess = (msg: string) => {
     toast.success(msg, {
@@ -45,19 +47,19 @@ const ButtonConnect = (props: IButtonConnect) => {
     });
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const conn = await props.reconnect(props.accessToken);
-        setMiraiConnection(conn);
-      } catch (e: any) {
-        toastError(e);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       setLoading(true);
+  //       const conn = await props.reconnect(props.accessToken);
+  //       setMiraiConnection(conn);
+  //     } catch (e: any) {
+  //       toastError(e);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   })();
+  // }, []);
 
   useEffect(() => {
     (async () => {

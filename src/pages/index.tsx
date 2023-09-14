@@ -95,6 +95,7 @@ const Home = () => {
             onShowModal={async (miraiConnection: MiraiConnection) => {
               return await showModal(miraiConnection);
             }}
+            connnection={miraiCore?.connections[params.row["id"]] ?? null}
             reconnect={async (accessToken: string) => {
               try {
                 if (accessToken) {
@@ -272,6 +273,7 @@ const Home = () => {
           toastSuccess("Reconnecting");
         })
         .on("reconnected", async (connection) => {
+          alert(`reconnected ${JSON.stringify(miraiCore)}`);
           await refectchConn();
         });
     }
