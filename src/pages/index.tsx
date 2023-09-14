@@ -233,11 +233,8 @@ const Home = () => {
         .on("reconnecting", () => {
           toastSuccess("Reconnecting");
         })
-        .on("reconnected", async () => {
-          setReconnecting(true);
-          setConnectionRows([]);
-          await refectchConn();
-          setReconnecting(false);
+        .on("reconnected", async ({ topic }) => {
+          alert(miraiCore.connections[topic].wcTopicId);
         });
     }
   }, [miraiCore]);
