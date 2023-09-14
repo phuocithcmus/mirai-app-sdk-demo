@@ -858,10 +858,10 @@
     qrcode "^1.5.3"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^3.5.6":
-  version "3.5.6"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.5.6/84cd2ad83cddf6a7be514d103e260861fb828d72#84cd2ad83cddf6a7be514d103e260861fb828d72"
-  integrity sha512-BMPLeWAM+JbJfZttNUWkOaSJ4ZV7ZwqC7uUVooH5UZgR/tsSrR3PRPPa81usw56n46J9K1nqlQmBKCwelxsEsQ==
+"@mirailabs-co/miraiid-js@^3.5.7":
+  version "3.5.7"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.5.7/c0ee0e2e8e2f79c86e5dd2d2673b9874162ed7c2#c0ee0e2e8e2f79c86e5dd2d2673b9874162ed7c2"
+  integrity sha512-j2zoKuzxai7Sga1WrhFflMd8gqzCewdEk/KacqRJYqWdV/4sXZsNe2QS2KSKdn6q7fYSwgJ2O/93ekL6DMfbdQ==
   dependencies:
     "@ethersproject/keccak256" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
@@ -873,6 +873,7 @@
     jest "^29.6.3"
     jwt-decode "^3.1.2"
     lodash "^4.17.21"
+    react-hot-toast "^2.4.1"
     socket.io-client "^4.7.2"
     uuid "^9.0.0"
 
