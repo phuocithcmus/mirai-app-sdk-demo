@@ -50,6 +50,8 @@ const Home = () => {
     }[]
   >([]);
 
+  const [reconnecting, setReconnecting] = useState<boolean>(false);
+
   const showRequestModal = (provider: MiraiSignProvider) => {
     setOpenModalRequest(true);
     setProvider(provider);
@@ -199,21 +201,6 @@ const Home = () => {
       console.log("miraiCore.connections", await miraiCore.getAllConnection());
       const connections = Object.values(miraiCore.connections);
 
-      if (window !== undefined && typeof window !== "undefined") {
-        window.localStorage.setItem(
-          "connections",
-          JSON.stringify(
-            connections.map((e) => {
-              return {
-                id: e.topicId,
-                userId: e.accessToken,
-                action: "",
-              };
-            })
-          )
-        );
-      }
-
       if (connections.length === 0) {
         setConnectionRows([]);
       } else {
@@ -248,9 +235,11 @@ const Home = () => {
           toastSuccess("Reconnecting");
         })
         .on("reconnected", async () => {
+          setReconnecting(true);
           alert(`reconnected on app`);
           setConnectionRows([]);
           await refectchConn();
+          setReconnecting(false);
         });
     }
   }, [miraiCore]);
@@ -389,14 +378,16 @@ const Home = () => {
           container
           spacing={2}
         >
-          <DataGrid
-            autoHeight
-            rows={connectionRows}
-            columns={columns}
-            pageSizeOptions={[5]}
-            disableRowSelectionOnClick
-            keepNonExistentRowsSelected
-          />
+          {!reconnecting && (
+            <DataGrid
+              autoHeight
+              rows={connectionRows}
+              columns={columns}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
+              keepNonExistentRowsSelected
+            />
+          )}
         </Grid>
       </Box>
     </StyledEngineProvider>
