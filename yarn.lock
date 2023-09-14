@@ -839,10 +839,10 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
-"@mirailabs-co/mirai-web3-modal@^0.4.5":
-  version "0.4.5"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.4.5/da680c817f7297e6ec5012c06ea0225731d527e5#da680c817f7297e6ec5012c06ea0225731d527e5"
-  integrity sha512-2q6p92iQbleZm3BBAhr/0de8WsEO9EWfqd5W60TZo+rVQVclfjvm1URMrfJR72v9/1qcb/nXv2+0BZ/SXOYTfg==
+"@mirailabs-co/mirai-web3-modal@^0.4.6":
+  version "0.4.6"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.4.6/b6970c0eb51cdb5dfa8e55bd54ebae2feefc4299#b6970c0eb51cdb5dfa8e55bd54ebae2feefc4299"
+  integrity sha512-l/Uq5TZj7foL1sd61IMB6q9tD+Jwv6d8GzWtGTzg4SCYFr5S5MkhFLdoYBA+I/0rnQhMBoRgTx9bdcaUI05j0w==
   dependencies:
     "@lit-labs/react" "^2.0.1"
     animate.css "^4.1.1"
@@ -858,14 +858,14 @@
     qrcode "^1.5.3"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^3.5.5":
-  version "3.5.5"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.5.5/3c1f1701b6f071f000a0f9aa24f272fdd5aeaa3c#3c1f1701b6f071f000a0f9aa24f272fdd5aeaa3c"
-  integrity sha512-LAQCdakXh+xlJAzBDuGV6EfTAkdGSWfBrUgisB0Wq3vy8SbMrjlj8PlSfx9DrhSRvZI1SeMLGtlrveQ/DhxPtA==
+"@mirailabs-co/miraiid-js@^3.5.6":
+  version "3.5.6"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.5.6/84cd2ad83cddf6a7be514d103e260861fb828d72#84cd2ad83cddf6a7be514d103e260861fb828d72"
+  integrity sha512-BMPLeWAM+JbJfZttNUWkOaSJ4ZV7ZwqC7uUVooH5UZgR/tsSrR3PRPPa81usw56n46J9K1nqlQmBKCwelxsEsQ==
   dependencies:
     "@ethersproject/keccak256" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
-    "@mirailabs-co/mirai-web3-modal" "^0.4.5"
+    "@mirailabs-co/mirai-web3-modal" "^0.4.6"
     axios "^1.4.0"
     base64-js "^1.5.1"
     crypto-browserify "^3.12.0"
