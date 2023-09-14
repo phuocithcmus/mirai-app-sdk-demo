@@ -1,10 +1,13 @@
 import { MiraiWeb3Modal } from "@mirailabs-co/mirai-web3-modal";
-import { MiraiConnection, MiraiSignProvider } from "@mirailabs-co/miraiid-js";
+import {
+  MiraiConnection,
+  MiraiSignCore,
+  MiraiSignProvider,
+} from "@mirailabs-co/miraiid-js";
 import { Button, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import isMobile from "is-mobile";
 
 export interface IButtonConnect {
   id: string;
@@ -15,6 +18,8 @@ export interface IButtonConnect {
   ) => Promise<string | undefined>;
   initMiraiProvider: (provider: MiraiSignProvider) => void;
   showRequestModal: (provider: MiraiSignProvider) => void;
+  reloadProvider?: boolean;
+  miraiCore: MiraiSignCore;
 }
 
 const ButtonConnect = (props: IButtonConnect) => {
@@ -62,42 +67,49 @@ const ButtonConnect = (props: IButtonConnect) => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (miraiConnection) {
-  //       miraiConnection
-  //         .on("approved", async ({ topicId }) => {
-  //           const provider = await miraiConnection?.getProvider();
+  useEffect(() => {
+    (async () => {
+      if (props.reloadProvider) {
+        const provider = await props.miraiCore.connections[
+          props.id
+        ].getProvider();
+        if (provider) {
+          setProvider(provider);
+        }
+      }
+    })();
+  }, [props.reloadProvider, props.miraiCore]);
 
-  //           if (provider) {
-  //             //   props.initMiraiProvider(provider);
+  useEffect(() => {
+    (async () => {
+      if (miraiConnection) {
+        miraiConnection
+          .on("approved", async ({ topicId }) => {
+            const provider = await miraiConnection?.getProvider();
 
-  //             setProvider(provider);
-  //           }
+            if (provider) {
+              setProvider(provider);
+            }
 
-  //           setStatus("approved");
+            setStatus("approved");
+          })
+          .on("rejected", async ({ message }) => {
+            setStatus("rejected");
+          })
+          .on("error", async ({ message }) => {
+            toastError(message);
+          });
+      }
+    })();
+  }, [miraiConnection]);
 
-  //           await web3Modal.current?.closeModal();
-  //         })
-  //         .on("rejected", async ({ message }) => {
-  //           await web3Modal.current?.closeModal();
-  //           setStatus("rejected");
-  //         })
-  //         .on("error", async ({ message }) => {
-  //           await web3Modal.current?.closeModal();
-  //           toastError(message);
-  //         });
-  //     }
-  //   })();
-  // }, [miraiConnection]);
-
-  // useEffect(() => {
-  //   if (status === "approved") {
-  //     toastSuccess("User approved session");
-  //   } else if (status === "rejected") {
-  //     toastError("User rejected method");
-  //   }
-  // }, [status]);
+  useEffect(() => {
+    if (status === "approved") {
+      toastSuccess("User approved session");
+    } else if (status === "rejected") {
+      toastError("User rejected method");
+    }
+  }, [status]);
 
   const renderTextButton = () => {
     if (!miraiConnection) {
@@ -151,24 +163,6 @@ const ButtonConnect = (props: IButtonConnect) => {
 
             if (miraiConnection) {
               const uri = await props.onShowModal(miraiConnection);
-              if (uri) {
-                // if (!isMobile()) {
-                // } else {
-                //   window.location.href = `/sign?w=${encodeURIComponent(uri)}`;
-                // }
-                // const web3modal = new MiraiWeb3Modal();
-                // if (web3modal) {
-                //   alert(
-                //     `${uri}&redirect=https://mirai-app-sdk-demo.vercel.app`
-                //   );
-                //   await web3modal.openModal({
-                //     uri,
-                //     redirectUrl:
-                //       "safari-https://www.mirai-app-sdk-demo.vercel.app",
-                //   });
-                //   web3Modal.current = web3modal;
-                // }
-              }
             } else {
               const conn = await props.reconnect(props.accessToken);
               if (conn) {

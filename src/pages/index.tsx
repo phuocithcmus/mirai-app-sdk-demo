@@ -51,7 +51,7 @@ const Home = () => {
     }[]
   >([]);
 
-  const [reconnecting, setReconnecting] = useState<boolean>(false);
+  const [reloadProvider, setReloadProvider] = useState<boolean>(false);
 
   const showRequestModal = (provider: MiraiSignProvider) => {
     setOpenModalRequest(true);
@@ -87,6 +87,7 @@ const Home = () => {
           <>
             {miraiCore && (
               <ButtonConnect
+                miraiCore={miraiCore}
                 showRequestModal={showRequestModal}
                 initMiraiProvider={(provider) => {
                   if (provider) {
@@ -118,6 +119,7 @@ const Home = () => {
                     await refectchConn();
                   }
                 }}
+                reloadProvider={reloadProvider}
               />
             )}
           </>
@@ -236,7 +238,11 @@ const Home = () => {
           toastSuccess("Reconnecting");
         })
         .on("reconnected", async ({ topic }) => {
-          alert(miraiCore.connections[topic].wcTopicId);
+          if (miraiCore.connections[topic].wcTopicId) {
+            toastSuccess(`User approved session ${topic}`);
+
+            setReloadProvider(true);
+          }
         });
     }
   }, [miraiCore]);
@@ -375,16 +381,14 @@ const Home = () => {
           container
           spacing={2}
         >
-          {!reconnecting && (
-            <DataGrid
-              autoHeight
-              rows={connectionRows}
-              columns={columns}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-              keepNonExistentRowsSelected
-            />
-          )}
+          <DataGrid
+            autoHeight
+            rows={connectionRows}
+            columns={columns}
+            pageSizeOptions={[5]}
+            disableRowSelectionOnClick
+            keepNonExistentRowsSelected
+          />
         </Grid>
       </Box>
     </StyledEngineProvider>
