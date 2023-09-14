@@ -849,30 +849,6 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
-"@mirailabs-co/mirai-web3-modal@^0.1.6":
-  version "0.1.9"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.1.9/39b8eb96b33191d1a8e98fdfe8211080febf2d7b#39b8eb96b33191d1a8e98fdfe8211080febf2d7b"
-  integrity sha512-gbCfYCwvXXKQ9QBF1bNAeghYNR5Zg9PKI96ClVfiWkWsMX9xM+j6brIvzlp1XGBrKJr7kN2nJ7Ed3+sokSLiFg==
-  dependencies:
-    "@lit-labs/react" "^2.0.1"
-    animate.css "^4.1.1"
-    axios "^1.4.0"
-    babel-plugin-react-css-modules "^5.2.6"
-    base64-js "^1.5.1"
-    crypto-browserify "^3.12.0"
-    ethers "^6.7.1"
-    eventemitter3 "^5.0.1"
-    is-mobile "^4.0.0"
-    jest "^29.6.3"
-    jwt-decode "^3.1.2"
-    lit "^2.8.0"
-    lodash "^4.17.21"
-    mobx "^6.10.0"
-    motion "^10.16.2"
-    qrcode "^1.5.3"
-    typescript-plugin-css-modules "^5.0.1"
-    uuid "^9.0.0"
-
 "@mirailabs-co/mirai-web3-modal@^0.4.1":
   version "0.4.1"
   resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.4.1/16cd06ee6f333638bdab9e7aec4e5c4eccfb2a94#16cd06ee6f333638bdab9e7aec4e5c4eccfb2a94"
@@ -897,14 +873,33 @@
     typescript-plugin-css-modules "^5.0.1"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^3.5.3":
-  version "3.5.3"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.5.3/9077098acaa889d48a9647e6f7eba08289e618dc#9077098acaa889d48a9647e6f7eba08289e618dc"
-  integrity sha512-6GmpOdAKRNoE2k8qP7HVk9Enku0xTDAP6tRzVT4yYpNUrE7Liv2rUNXS6dqbMFkbyIAvN5A2J0uReKfsSniagA==
+"@mirailabs-co/mirai-web3-modal@^0.4.5":
+  version "0.4.5"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/mirai-web3-modal/0.4.5/da680c817f7297e6ec5012c06ea0225731d527e5#da680c817f7297e6ec5012c06ea0225731d527e5"
+  integrity sha512-2q6p92iQbleZm3BBAhr/0de8WsEO9EWfqd5W60TZo+rVQVclfjvm1URMrfJR72v9/1qcb/nXv2+0BZ/SXOYTfg==
+  dependencies:
+    "@lit-labs/react" "^2.0.1"
+    animate.css "^4.1.1"
+    axios "^1.4.0"
+    eventemitter3 "^5.0.1"
+    is-mobile "^4.0.0"
+    jest "^29.6.3"
+    jwt-decode "^3.1.2"
+    lit "^2.8.0"
+    lodash "^4.17.21"
+    mobx "^6.10.0"
+    motion "^10.16.2"
+    qrcode "^1.5.3"
+    uuid "^9.0.0"
+
+"@mirailabs-co/miraiid-js@^3.5.4":
+  version "3.5.4"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.5.4/4149a2a759314545a13c36a102a854078f717d6d#4149a2a759314545a13c36a102a854078f717d6d"
+  integrity sha512-jvuCM2xSzOm3R+A4LC2Tnr77zkgFCdcR2opQhEjrKnpLeKGWimquh/z6KzCfHmZX/z4um+KvY2iLMq5lJiJoHw==
   dependencies:
     "@ethersproject/keccak256" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
-    "@mirailabs-co/mirai-web3-modal" "^0.1.6"
+    "@mirailabs-co/mirai-web3-modal" "^0.4.5"
     axios "^1.4.0"
     base64-js "^1.5.1"
     crypto-browserify "^3.12.0"

@@ -165,6 +165,7 @@ const Home = () => {
             icons: [""],
           },
           redirectUri: "https://miraiid.io",
+          useWeb3Modal: true,
         });
 
         if (miraiCore) {
