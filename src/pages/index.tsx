@@ -42,7 +42,7 @@ const Home = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isFetchingUser, setIsFetchingUser] = useState<boolean>(false);
-
+  const [isLoadingCore, setIsLoadingCore] = useState<boolean>(true);
   const [connectionRows, setConnectionRows] = useState<
     {
       id: string;
@@ -81,41 +81,46 @@ const Home = () => {
       width: 333,
       // editable: true,
       renderCell: (params) => {
+        alert(miraiCore?.connections[params.row["id"]]);
         return (
-          <ButtonConnect
-            showRequestModal={showRequestModal}
-            initMiraiProvider={(provider) => {
-              if (provider) {
-                setProvider(provider);
-                setOpenModalRequest(true);
-              }
-            }}
-            accessToken={params.row["userId"]}
-            id={params.id as string}
-            onShowModal={async (miraiConnection: MiraiConnection) => {
-              return await showModal(miraiConnection);
-            }}
-            connnection={miraiCore?.connections[params.row["id"]] ?? null}
-            reconnect={async (accessToken: string) => {
-              try {
-                if (accessToken) {
-                  const connection = (await miraiCore?.connect({
-                    accessToken,
-                  })) as MiraiConnection;
-
-                  if (connection) {
-                    return connection;
+          <>
+            {miraiCore && (
+              <ButtonConnect
+                showRequestModal={showRequestModal}
+                initMiraiProvider={(provider) => {
+                  if (provider) {
+                    setProvider(provider);
+                    setOpenModalRequest(true);
                   }
-                } else {
-                  toastError("Not found access token");
-                }
-              } catch (e: any) {
-                toastError(e);
-              } finally {
-                await refectchConn();
-              }
-            }}
-          />
+                }}
+                accessToken={params.row["userId"]}
+                id={params.id as string}
+                onShowModal={async (miraiConnection: MiraiConnection) => {
+                  return await showModal(miraiConnection);
+                }}
+                connnection={miraiCore?.connections[params.row["id"]] ?? null}
+                reconnect={async (accessToken: string) => {
+                  try {
+                    if (accessToken) {
+                      const connection = (await miraiCore?.connect({
+                        accessToken,
+                      })) as MiraiConnection;
+
+                      if (connection) {
+                        return connection;
+                      }
+                    } else {
+                      toastError("Not found access token");
+                    }
+                  } catch (e: any) {
+                    toastError(e);
+                  } finally {
+                    await refectchConn();
+                  }
+                }}
+              />
+            )}
+          </>
         );
       },
     },
@@ -172,34 +177,6 @@ const Home = () => {
         console.log(e);
       }
     })();
-
-    return () => {
-      alert("Unmount ne");
-    };
-  }, []);
-
-  useEffect(() => {
-    if (window !== undefined && typeof window !== "undefined") {
-      const conns = JSON.parse(
-        window.localStorage.getItem("connections") as string
-      ) as {
-        id: string;
-        userId: string;
-        action: ReactNode;
-      }[];
-
-      if (conns) {
-        setConnectionRows(
-          conns.map((conn) => {
-            return {
-              id: conn.id,
-              userId: conn.userId,
-              action: "",
-            };
-          })
-        );
-      }
-    }
 
     return () => {
       alert("Unmount ne");
@@ -413,14 +390,17 @@ const Home = () => {
           container
           spacing={2}
         >
-          <DataGrid
-            autoHeight
-            rows={connectionRows}
-            columns={columns}
-            pageSizeOptions={[5]}
-            disableRowSelectionOnClick
-            keepNonExistentRowsSelected
-          />
+          {!isLoadingCore && (
+            <DataGrid
+              loading={isLoadingCore}
+              autoHeight
+              rows={connectionRows}
+              columns={columns}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
+              keepNonExistentRowsSelected
+            />
+          )}
         </Grid>
       </Box>
     </StyledEngineProvider>

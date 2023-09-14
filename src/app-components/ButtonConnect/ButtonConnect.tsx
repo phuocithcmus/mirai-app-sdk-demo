@@ -200,7 +200,10 @@ const ButtonConnect = (props: IButtonConnect) => {
                 }
               }
             } else {
-              await props.reconnect(props.accessToken);
+              const conn = await props.reconnect(props.accessToken);
+              if (conn) {
+                setMiraiConnection(conn);
+              }
             }
           } finally {
             setConnecting(false);
