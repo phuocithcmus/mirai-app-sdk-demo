@@ -173,28 +173,6 @@ const Home = () => {
 
         if (miraiCore) {
           toastSuccess("Initialized MiraiCore");
-
-          miraiCore
-            ?.on("disconnected", async ({ connection, reason }) => {
-              if (!connection) {
-                toastError("Connected reset ");
-              } else {
-                toastError(`Disconnected ${connection.topicId} ${reason}`);
-                setAccessToken(null);
-                setUserId(null);
-
-                await refectchConn();
-              }
-            })
-            .on("reconnecting", () => {
-              toastSuccess("Reconnecting");
-            })
-            .on("reconnected", async ({ topic, approved }) => {
-              if (approved) {
-                toastSuccess(`User reconnected `);
-                setReloadProvider(true);
-              }
-            });
         }
 
         setMiraiCore(miraiCore);
@@ -207,6 +185,32 @@ const Home = () => {
       alert("Unmount ne");
     };
   }, []);
+
+  useEffect(() => {
+    if (miraiCore) {
+      miraiCore
+        ?.on("disconnected", async ({ connection, reason }) => {
+          if (!connection) {
+            toastError("Connected reset ");
+          } else {
+            toastError(`Disconnected ${connection.topicId} ${reason}`);
+            setAccessToken(null);
+            setUserId(null);
+
+            await refectchConn();
+          }
+        })
+        .on("reconnecting", () => {
+          toastSuccess("Reconnecting");
+        })
+        .on("reconnected", async ({ topic, approved }) => {
+          if (approved) {
+            toastSuccess(`User reconnected `);
+            setReloadProvider(true);
+          }
+        });
+    }
+  }, [miraiCore]);
 
   const showModal = async (miraiConnection: MiraiConnection) => {
     if (miraiCore && miraiConnection) {
@@ -225,6 +229,8 @@ const Home = () => {
     if (miraiCore) {
       console.log("miraiCore.connections", await miraiCore.getAllConnection());
       const connections = Object.values(miraiCore.connections);
+
+      console.log("connections", connections);
 
       if (connections.length === 0) {
         setConnectionRows([]);
