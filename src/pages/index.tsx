@@ -239,6 +239,7 @@ const Home = () => {
         })
         .on("reconnected", async ({ topic, approved }) => {
           if (approved) {
+            toastSuccess(`User reconnected `);
             setReloadProvider(true);
           }
         });
