@@ -239,8 +239,6 @@ const Home = () => {
         })
         .on("reconnected", async ({ topic, approved }) => {
           if (approved) {
-            toastSuccess(`User approved session ${topic}`);
-
             setReloadProvider(true);
           }
         });
