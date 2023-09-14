@@ -247,8 +247,8 @@ const Home = () => {
         .on("reconnecting", () => {
           toastSuccess("Reconnecting");
         })
-        .on("reconnected", async (connection) => {
-          alert(`reconnected ${JSON.stringify(miraiCore)}`);
+        .on("reconnected", async () => {
+          alert(`reconnected `);
           await refectchConn();
         });
     }
