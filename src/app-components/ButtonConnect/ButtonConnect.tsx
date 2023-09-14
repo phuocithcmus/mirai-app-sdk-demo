@@ -15,7 +15,6 @@ export interface IButtonConnect {
   ) => Promise<string | undefined>;
   initMiraiProvider: (provider: MiraiSignProvider) => void;
   showRequestModal: (provider: MiraiSignProvider) => void;
-  connnection: MiraiConnection | null;
 }
 
 const ButtonConnect = (props: IButtonConnect) => {
@@ -29,9 +28,7 @@ const ButtonConnect = (props: IButtonConnect) => {
   const [status, setStatus] = useState<"approved" | "rejected" | null>(null);
   const [wcUri, setWcUri] = useState<string | null>(null);
   const [miraiConnection, setMiraiConnection] =
-    useState<MiraiConnection | null>(props.connnection);
-
-  alert(props.connnection?.wcTopicId);
+    useState<MiraiConnection | null>(null);
 
   const toastSuccess = (msg: string) => {
     toast.success(msg, {
