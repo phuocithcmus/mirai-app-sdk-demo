@@ -858,10 +858,10 @@
     qrcode "^1.5.3"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^3.5.7":
-  version "3.5.7"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.5.7/c0ee0e2e8e2f79c86e5dd2d2673b9874162ed7c2#c0ee0e2e8e2f79c86e5dd2d2673b9874162ed7c2"
-  integrity sha512-j2zoKuzxai7Sga1WrhFflMd8gqzCewdEk/KacqRJYqWdV/4sXZsNe2QS2KSKdn6q7fYSwgJ2O/93ekL6DMfbdQ==
+"@mirailabs-co/miraiid-js@^3.5.8":
+  version "3.5.8"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.5.8/4ac89b520557365e5d917f6ec8fae9c876e94f29#4ac89b520557365e5d917f6ec8fae9c876e94f29"
+  integrity sha512-gC/ImlkgK5XgzChqd3ySwXpEknRZft/tEFTo7GthzJJfxM1y+rR5kzVfenaoMQdYRpYnaUX0sBtm5ZEB7Yyl3w==
   dependencies:
     "@ethersproject/keccak256" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
