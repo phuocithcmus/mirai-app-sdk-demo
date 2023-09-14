@@ -173,6 +173,28 @@ const Home = () => {
 
         if (miraiCore) {
           toastSuccess("Initialized MiraiCore");
+
+          miraiCore
+            ?.on("disconnected", async ({ connection, reason }) => {
+              if (!connection) {
+                toastError("Connected reset ");
+              } else {
+                toastError(`Disconnected ${connection.topicId} ${reason}`);
+                setAccessToken(null);
+                setUserId(null);
+
+                await refectchConn();
+              }
+            })
+            .on("reconnecting", () => {
+              toastSuccess("Reconnecting");
+            })
+            .on("reconnected", async ({ topic, approved }) => {
+              if (approved) {
+                toastSuccess(`User reconnected `);
+                setReloadProvider(true);
+              }
+            });
         }
 
         setMiraiCore(miraiCore);
@@ -219,32 +241,6 @@ const Home = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (miraiCore) {
-      miraiCore
-        ?.on("disconnected", async ({ connection, reason }) => {
-          if (!connection) {
-            toastError("Connected reset ");
-          } else {
-            toastError(`Disconnected ${connection.topicId} ${reason}`);
-            setAccessToken(null);
-            setUserId(null);
-
-            await refectchConn();
-          }
-        })
-        .on("reconnecting", () => {
-          toastSuccess("Reconnecting");
-        })
-        .on("reconnected", async ({ topic, approved }) => {
-          if (approved) {
-            toastSuccess(`User reconnected `);
-            setReloadProvider(true);
-          }
-        });
-    }
-  }, [miraiCore]);
 
   useEffect(() => {
     (async () => {
