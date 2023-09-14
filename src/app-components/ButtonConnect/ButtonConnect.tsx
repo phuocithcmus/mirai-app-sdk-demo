@@ -31,6 +31,8 @@ const ButtonConnect = (props: IButtonConnect) => {
   const [miraiConnection, setMiraiConnection] =
     useState<MiraiConnection | null>(props.connnection);
 
+  alert(props.connnection?.wcTopicId);
+
   const toastSuccess = (msg: string) => {
     toast.success(msg, {
       style: {
