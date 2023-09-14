@@ -248,7 +248,8 @@ const Home = () => {
           toastSuccess("Reconnecting");
         })
         .on("reconnected", async () => {
-          alert(`reconnected `);
+          alert(`reconnected on app`);
+          setConnectionRows([]);
           await refectchConn();
         });
     }

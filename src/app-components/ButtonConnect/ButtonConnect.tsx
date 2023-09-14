@@ -49,19 +49,21 @@ const ButtonConnect = (props: IButtonConnect) => {
     });
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       setLoading(true);
-  //       const conn = await props.reconnect(props.accessToken);
-  //       setMiraiConnection(conn);
-  //     } catch (e: any) {
-  //       toastError(e);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const conn = await props.reconnect(props.accessToken);
+        if (conn) {
+          setMiraiConnection(conn);
+        }
+      } catch (e: any) {
+        toastError(e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
