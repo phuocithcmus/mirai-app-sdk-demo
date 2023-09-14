@@ -62,42 +62,42 @@ const ButtonConnect = (props: IButtonConnect) => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (miraiConnection) {
-  //       miraiConnection
-  //         .on("approved", async ({ topicId }) => {
-  //           const provider = await miraiConnection?.getProvider();
+  useEffect(() => {
+    (async () => {
+      if (miraiConnection) {
+        miraiConnection
+          .on("approved", async ({ topicId }) => {
+            const provider = await miraiConnection?.getProvider();
 
-  //           if (provider) {
-  //             //   props.initMiraiProvider(provider);
+            if (provider) {
+              //   props.initMiraiProvider(provider);
 
-  //             setProvider(provider);
-  //           }
+              setProvider(provider);
+            }
 
-  //           setStatus("approved");
+            setStatus("approved");
 
-  //           await web3Modal.current?.closeModal();
-  //         })
-  //         .on("rejected", async ({ message }) => {
-  //           await web3Modal.current?.closeModal();
-  //           setStatus("rejected");
-  //         })
-  //         .on("error", async ({ message }) => {
-  //           await web3Modal.current?.closeModal();
-  //           toastError(message);
-  //         });
-  //     }
-  //   })();
-  // }, [miraiConnection]);
+            await web3Modal.current?.closeModal();
+          })
+          .on("rejected", async ({ message }) => {
+            await web3Modal.current?.closeModal();
+            setStatus("rejected");
+          })
+          .on("error", async ({ message }) => {
+            await web3Modal.current?.closeModal();
+            toastError(message);
+          });
+      }
+    })();
+  }, [miraiConnection]);
 
-  // useEffect(() => {
-  //   if (status === "approved") {
-  //     toastSuccess("User approved session");
-  //   } else if (status === "rejected") {
-  //     toastError("User rejected method");
-  //   }
-  // }, [status]);
+  useEffect(() => {
+    if (status === "approved") {
+      toastSuccess("User approved session");
+    } else if (status === "rejected") {
+      toastError("User rejected method");
+    }
+  }, [status]);
 
   const renderTextButton = () => {
     if (!miraiConnection) {

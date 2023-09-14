@@ -18,6 +18,7 @@ import ButtonConnect from "@/app-components/ButtonConnect/ButtonConnect";
 import ProviderForm from "@/app-components/ProviderForm/ProviderForm";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { ToastController } from "@mirailabs-co/mirai-web3-modal";
 
 function start_and_end(str: string) {
   if (str) {
