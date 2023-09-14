@@ -80,7 +80,6 @@ const Home = () => {
       width: 333,
       // editable: true,
       renderCell: (params) => {
-        alert(miraiCore?.connections[params.row["id"]]);
         return (
           <>
             {miraiCore && (
