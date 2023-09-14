@@ -237,8 +237,8 @@ const Home = () => {
         .on("reconnecting", () => {
           toastSuccess("Reconnecting");
         })
-        .on("reconnected", async ({ topic }) => {
-          if (miraiCore.connections[topic].wcTopicId) {
+        .on("reconnected", async ({ topic, approved }) => {
+          if (approved) {
             toastSuccess(`User approved session ${topic}`);
 
             setReloadProvider(true);
