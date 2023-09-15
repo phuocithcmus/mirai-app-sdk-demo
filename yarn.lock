@@ -859,10 +859,10 @@
     react-hot-toast "^2.4.1"
     uuid "^9.0.0"
 
-"@mirailabs-co/miraiid-js@^3.7.2":
-  version "3.7.2"
-  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.7.2/e13596aa0d22d90972ffcb0f3299dff47bb2cecd#e13596aa0d22d90972ffcb0f3299dff47bb2cecd"
-  integrity sha512-1GxaJ5y+itRgRydfyx6yE/k7SaPSuqg8ftHNf6dP6s2iQdzS/yi3oiZU0FY8SMz+XEpm84o5SyLJEoa/rCap0A==
+"@mirailabs-co/miraiid-js@^3.7.3":
+  version "3.7.3"
+  resolved "https://npm.pkg.github.com/download/@mirailabs-co/miraiid-js/3.7.3/76ce17118bccaabe42dbe6fecc90069f60239db3#76ce17118bccaabe42dbe6fecc90069f60239db3"
+  integrity sha512-WYFq4BF+nGM4ICcsa6ly1yn2Xzs8U5lRHBK8pNY2UuQvQRCPX66OmFdNlmuMoNI5Z0Dx8NinIqCLZOfqca6QFA==
   dependencies:
     "@ethersproject/keccak256" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
