@@ -70,6 +70,8 @@ const ButtonConnect = (props: IButtonConnect) => {
   useEffect(() => {
     (async () => {
       if (props.reloadProvider) {
+        setMiraiConnection(props.miraiCore.connections[props.id]);
+
         const provider = await props.miraiCore.connections[
           props.id
         ].getProvider();
