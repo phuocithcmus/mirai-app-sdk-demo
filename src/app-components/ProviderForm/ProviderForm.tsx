@@ -41,7 +41,10 @@ const ProviderForm = (props: IProviderForm) => {
       case "eth_accounts":
         return "";
       case "personal_sign":
-        return JSON.stringify(["test", "your account"]);
+        return JSON.stringify([
+          "test",
+          '"' + props.provider?.accounts[0] + '"',
+        ]);
       case "wallet_addEthereumChain":
         return JSON.stringify([
           {
@@ -69,7 +72,14 @@ const ProviderForm = (props: IProviderForm) => {
       case "eth_chainId":
         return "";
       case "eth_getBalance":
-        return JSON.stringify(["your address", "Block number"]);
+        return (
+          "[" +
+          '"' +
+          props.provider?.accounts[0] +
+          '"' +
+          "," +
+          '"Block number"]'
+        );
       case "eth_requestAccounts":
         return "";
       default:
