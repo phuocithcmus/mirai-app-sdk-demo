@@ -1,9 +1,5 @@
 import { MiraiWeb3Modal } from "@mirailabs-co/mirai-web3-modal";
-import {
-  MiraiConnection,
-  MiraiSignCore,
-  MiraiSignProvider,
-} from "@mirailabs-co/miraiid-js";
+import { MiraiSignClient } from "@mirailabs-co/miraiid-js";
 import { Button, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
@@ -12,28 +8,32 @@ import { toast } from "react-hot-toast";
 export interface IButtonConnect {
   id: string;
   accessToken: string;
-  reconnect: (accessToken: string) => Promise<MiraiConnection | undefined>;
+  reconnect: (
+    accessToken: string
+  ) => Promise<MiraiSignClient.Connection | undefined>;
   onShowModal: (
-    miraiConnection: MiraiConnection
+    miraiConnection: MiraiSignClient.Connection
   ) => Promise<string | undefined>;
-  initMiraiProvider: (provider: MiraiSignProvider) => void;
-  showRequestModal: (provider: MiraiSignProvider) => void;
+  initMiraiProvider: (provider: MiraiSignClient.Provider) => void;
+  showRequestModal: (provider: MiraiSignClient.Provider) => void;
   reloadProvider?: boolean;
-  miraiCore: MiraiSignCore;
+  miraiCore: MiraiSignClient.Core;
 }
 
 const ButtonConnect = (props: IButtonConnect) => {
   const [connecting, setConnecting] = useState<boolean>(false);
   const [disconnecting, setDisconnecting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
+  const [provider, setProvider] = useState<MiraiSignClient.Provider | null>(
+    null
+  );
 
   const web3Modal = useRef<MiraiWeb3Modal | null>(null);
 
   const [status, setStatus] = useState<"approved" | "rejected" | null>(null);
   const [wcUri, setWcUri] = useState<string | null>(null);
   const [miraiConnection, setMiraiConnection] =
-    useState<MiraiConnection | null>(null);
+    useState<MiraiSignClient.Connection | null>(null);
 
   const toastSuccess = (msg: string) => {
     toast.success(msg, {

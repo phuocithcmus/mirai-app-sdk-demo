@@ -5,11 +5,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button, MenuItem, Select, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { MiraiSignProvider, RpcMethod } from "@mirailabs-co/miraiid-js";
+import { MiraiSignClient } from "@mirailabs-co/miraiid-js";
 import { toast } from "react-hot-toast";
 
 export interface IProviderForm {
-  provider: MiraiSignProvider | null;
+  provider: MiraiSignClient.Provider | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -121,23 +121,31 @@ const ProviderForm = (props: IProviderForm) => {
             style={{ width: "100%", margin: "5px" }}
             variant="outlined"
           >
-            <MenuItem value={"personal_sign" as RpcMethod}>
+            <MenuItem value={"personal_sign" as MiraiSignClient.RpcMethod}>
               <em>personal_sign</em>
             </MenuItem>
-            <MenuItem value={"wallet_addEthereumChain" as RpcMethod}>
+            <MenuItem
+              value={"wallet_addEthereumChain" as MiraiSignClient.RpcMethod}
+            >
               wallet_addEthereumChain
             </MenuItem>
-            <MenuItem value={"wallet_switchEthereumChain" as RpcMethod}>
+            <MenuItem
+              value={"wallet_switchEthereumChain" as MiraiSignClient.RpcMethod}
+            >
               wallet_switchEthereumChain
             </MenuItem>
-            <MenuItem value={"eth_chainId" as RpcMethod}>eth_chainId</MenuItem>
-            <MenuItem value={"eth_getBalance" as RpcMethod}>
+            <MenuItem value={"eth_chainId" as MiraiSignClient.RpcMethod}>
+              eth_chainId
+            </MenuItem>
+            <MenuItem value={"eth_getBalance" as MiraiSignClient.RpcMethod}>
               eth_getBalance
             </MenuItem>
-            <MenuItem value={"eth_accounts" as RpcMethod}>
+            <MenuItem value={"eth_accounts" as MiraiSignClient.RpcMethod}>
               eth_accounts
             </MenuItem>
-            <MenuItem value={"eth_requestAccounts" as RpcMethod}>
+            <MenuItem
+              value={"eth_requestAccounts" as MiraiSignClient.RpcMethod}
+            >
               eth_requestAccounts
             </MenuItem>
           </Select>
@@ -195,7 +203,7 @@ const ProviderForm = (props: IProviderForm) => {
               console.log(params ? JSON.parse(params) : null);
 
               const response = await props.provider?.request({
-                method: method as RpcMethod,
+                method: method as MiraiSignClient.RpcMethod,
                 params: params ? JSON.parse(params) : null,
               });
 
