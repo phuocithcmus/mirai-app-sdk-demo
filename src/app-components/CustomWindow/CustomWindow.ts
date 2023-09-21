@@ -20,16 +20,6 @@ class CustomWindow extends AbstractMiraiWindow {
       }
     });
   }
-  onOpen(payload: any): Promise<void> {
-    return new Promise((resolve, reject) => {
-      alert(payload);
-    });
-  }
-  onClose(payload: any): Promise<void> {
-    return new Promise((resolve, reject) => {
-      alert(payload);
-    });
-  }
 }
 
 export { CustomWindow };
