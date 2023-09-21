@@ -5,20 +5,14 @@ import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import {
-  IAuthClient,
-  AuthClient,
-  MiraiConnection,
-  MiraiSignCore,
-  MiraiSignProvider,
-  AuthEngineTypes,
-} from "@mirailabs-co/miraiid-js";
+import { MiraiAuth, MiraiSignClient } from "@mirailabs-co/miraiid-js";
 import ModalConnect from "@/app-components/ModalConnect/ModalConnect";
 import ButtonConnect from "@/app-components/ButtonConnect/ButtonConnect";
 import ProviderForm from "@/app-components/ProviderForm/ProviderForm";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { ToastController } from "@mirailabs-co/mirai-web3-modal";
+import { CustomWindow } from "@/app-components/CustomWindow/CustomWindow";
 
 function start_and_end(str: string) {
   if (str) {
@@ -36,10 +30,14 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [openModalRequest, setOpenModalRequest] = useState(false);
 
-  const [miraiCore, setMiraiCore] = useState<MiraiSignCore | null>(null);
+  const [miraiCore, setMiraiCore] = useState<MiraiSignClient.Core | null>(null);
 
-  const [provider, setProvider] = useState<MiraiSignProvider | null>(null);
-  const [auth_client, setAuthClient] = useState<IAuthClient | null>(null);
+  const [provider, setProvider] = useState<MiraiSignClient.Provider | null>(
+    null
+  );
+  const [auth_client, setAuthClient] = useState<MiraiAuth.IAuthClient | null>(
+    null
+  );
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isFetchingUser, setIsFetchingUser] = useState<boolean>(false);
@@ -53,7 +51,7 @@ const Home = () => {
 
   const [reloadProvider, setReloadProvider] = useState<boolean>(false);
 
-  const showRequestModal = (provider: MiraiSignProvider) => {
+  const showRequestModal = (provider: MiraiSignClient.Provider) => {
     setOpenModalRequest(true);
     setProvider(provider);
   };
@@ -97,7 +95,9 @@ const Home = () => {
                 }}
                 accessToken={params.row["userId"]}
                 id={params.id as string}
-                onShowModal={async (miraiConnection: MiraiConnection) => {
+                onShowModal={async (
+                  miraiConnection: MiraiSignClient.Connection
+                ) => {
                   return await showModal(miraiConnection);
                 }}
                 reconnect={async (accessToken: string) => {
@@ -105,7 +105,7 @@ const Home = () => {
                     if (accessToken) {
                       const connection = (await miraiCore?.connect({
                         accessToken,
-                      })) as MiraiConnection;
+                      })) as MiraiSignClient.Connection;
 
                       if (connection) {
                         return connection;
@@ -157,7 +157,7 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       try {
-        const miraiCore = await MiraiSignCore.init({
+        const miraiCore = await MiraiSignClient.Core.init({
           clientId: "24f0da89-b26f-492f-9818-4f0ab4fcdfe7",
           chainNameSpace: "eip155",
           chains: ["0x38", "0x1"],
@@ -168,7 +168,8 @@ const Home = () => {
             icons: [""],
           },
           redirectUri: "https://miraiid.io",
-          useWeb3Modal: true,
+          useMiraiWindow: true,
+          customWindow: new CustomWindow(),
         });
 
         if (miraiCore) {
@@ -212,7 +213,7 @@ const Home = () => {
     }
   }, [miraiCore]);
 
-  const showModal = async (miraiConnection: MiraiConnection) => {
+  const showModal = async (miraiConnection: MiraiSignClient.Connection) => {
     if (miraiCore && miraiConnection) {
       try {
         const { uri } = await miraiCore.showConnectionModal(miraiConnection);
@@ -251,7 +252,7 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       // Initialize client make
-      const client = await AuthClient.init({
+      const client = await MiraiAuth.Client.init({
         name: "mirai app test sdk",
         mode: "development",
         clientId: "24f0da89-b26f-492f-9818-4f0ab4fcdfe7",
@@ -346,7 +347,7 @@ const Home = () => {
                   redirect_uri: "https://mirai-app-sdk-demo.vercel.app",
                   code_challenge_method: "S256",
                   origin: "https://mirai-app-sdk-demo.vercel.app",
-                } as AuthEngineTypes.RequestParams);
+                } as MiraiAuth.AuthEngineTypes.RequestParams);
               }
             }}
             variant="outlined"
