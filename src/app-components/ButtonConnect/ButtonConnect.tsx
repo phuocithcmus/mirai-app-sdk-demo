@@ -96,12 +96,15 @@ const ButtonConnect = (props: IButtonConnect) => {
             }
 
             setStatus("approved");
+            setConnecting(false);
           })
           .on("rejected", async ({ message }) => {
             setStatus("rejected");
+            setConnecting(false);
           })
           .on("error", async ({ message }) => {
             toastError(message);
+            setConnecting(false);
           });
       }
     })();
