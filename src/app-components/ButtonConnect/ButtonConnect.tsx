@@ -89,8 +89,6 @@ const ButtonConnect = (props: IButtonConnect) => {
           .on("approved", async ({ topicId }) => {
             const provider = await miraiConnection?.getProvider();
 
-            alert(provider);
-
             if (provider) {
               setProvider(provider);
             }
