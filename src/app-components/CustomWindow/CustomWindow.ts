@@ -7,7 +7,7 @@ class CustomWindow extends AbstractMiraiWindow {
   open({ uri }: { uri: string }): Promise<void> {
     return new Promise((resolve, reject) => {
       const windowObjectReference = window.open(
-        `http://id-web-local.mirailabs.co/sign?w=${encodeURIComponent(uri)}`
+        `https://id-dev-v2.mirailabs.co/sign?w=${encodeURIComponent(uri)}`
       );
 
       this.currentWindow = windowObjectReference;
