@@ -168,8 +168,9 @@ const Home = () => {
             icons: [""],
           },
           redirectUri: "https://miraiid.io",
-          useMiraiWindow: true,
-          customWindow: new CustomWindow(),
+          // useMiraiWindow: true,
+          // customWindow: new CustomWindow(),
+          useWeb3Modal: true,
         });
 
         if (miraiCore) {
