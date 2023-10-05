@@ -169,6 +169,10 @@ const Home = () => {
           // useMiraiWindow: true,
           // customWindow: new CustomWindow(),
           useWeb3Modal: true,
+          rpcMap: {
+            "0x38": ["https://bsc-dataseed3.binance.org"],
+            "0x1": ["https://rpc.ankr.com/eth"],
+          },
         });
 
         if (miraiCore) {
