@@ -158,7 +158,7 @@ const Home = () => {
         const miraiCore = await MiraiSignClient.Core.init({
           clientId: "24f0da89-b26f-492f-9818-4f0ab4fcdfe7",
           chainNameSpace: "eip155",
-          chains: ["0x38", "0x1"],
+          chains: [Number(137).toString(16), Number(80001).toString(16)],
           // defaultChainId: "0x38",
           metaData: {
             name: "Mirai App",
@@ -170,8 +170,10 @@ const Home = () => {
           // customWindow: new CustomWindow(),
           useWeb3Modal: true,
           rpcMap: {
-            "0x38": ["https://bsc-dataseed3.binance.org"],
-            "0x1": ["https://rpc.ankr.com/eth"],
+            [Number(137).toString(16)]: [
+              "https://polygon-mumbai.infura.io/v3/295cce92179b4be498665b1b16dfee34",
+            ],
+            [Number(80001).toString(16)]: ["https://polygon-rpc.com"],
           },
         });
 
