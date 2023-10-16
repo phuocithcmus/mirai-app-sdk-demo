@@ -11,6 +11,7 @@ import ButtonConnect from "@/app-components/ButtonConnect/ButtonConnect";
 import ProviderForm from "@/app-components/ProviderForm/ProviderForm";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { CustomWindow } from "@/app-components/CustomWindow/CustomWindow";
 
 function start_and_end(str: string) {
   if (str) {
@@ -166,9 +167,9 @@ const Home = () => {
             icons: [""],
           },
           redirectUri: "https://miraiid.io",
-          // useMiraiWindow: true,
-          // customWindow: new CustomWindow(),
-          useWeb3Modal: true,
+          useMiraiWindow: true,
+          customWindow: new CustomWindow(),
+          // useWeb3Modal: true,
           rpcMap: {
             [Number(137).toString(16)]: [
               "https://polygon-mumbai.infura.io/v3/295cce92179b4be498665b1b16dfee34",
