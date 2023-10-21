@@ -1387,10 +1387,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@pegaxy/auth-sdk@^3.8.1":
-  version "3.8.1"
-  resolved "https://npm.pkg.github.com/download/@Pegaxy/auth-sdk/3.8.1/a22fabe2a8f6d59f32bb859678c6a1a1afae057d#a22fabe2a8f6d59f32bb859678c6a1a1afae057d"
-  integrity sha512-ComZkS1haUSbg2VNhvqLoh4LUiCUfm+6nsTyBIJ+YJxsn3e9jPcCAd6ATarCOhT2BwGMUwTUQcV3LyU9zVjT0g==
+"@pegaxy/auth-sdk@^3.8.5":
+  version "3.8.5"
+  resolved "https://npm.pkg.github.com/download/@Pegaxy/auth-sdk/3.8.5/eed0412a94b1c8472129c864f58280e480745793#eed0412a94b1c8472129c864f58280e480745793"
+  integrity sha512-6A5pApoXtKO9sM6qzEB0mxeRoGcbBNB1gttov4zz0zzsKfbsn9WkiaRt3DrGWbv6CRVnjUITRVeoIYQ/Hgyi4w==
   dependencies:
     "@coinbase/wallet-sdk" "^3.3.0"
     "@walletconnect/ethereum-provider" "^2.10.1"
