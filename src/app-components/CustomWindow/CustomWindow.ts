@@ -9,7 +9,7 @@ class CustomWindow extends AbstractMiraiWindow {
       const windowObjectReference = window.open(
         `https://id-dev-v2.mirailabs.co/sign?w=${encodeURIComponent(
           uri
-        )}&r=https://mirai-app-sdk-demo.vercel.app/`
+        )}&r=${encodeURIComponent(`https://mirai-app-sdk-demo.vercel.app/`)}`
       );
 
       this.currentWindow = windowObjectReference;
