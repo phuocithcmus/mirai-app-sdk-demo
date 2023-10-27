@@ -5,17 +5,20 @@ import toast, { Toaster } from "react-hot-toast";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <div
-        id="popUpDiv"
-        style={{
-          display: "none",
-          width: "100%",
-          height: "100%",
-          overflow: "hidden",
-          paddingTop: "56.25%",
-          position: "relative",
-        }}
-      ></div>
+      <div className="container">
+        <div
+          className="responsive-iframe"
+          id="popUpDiv"
+          style={{
+            display: "none",
+            width: "100%",
+            height: "100%",
+            overflow: "hidden",
+            paddingTop: "56.25%",
+            position: "relative",
+          }}
+        ></div>
+      </div>
       <Component {...pageProps} />
       <Toaster />
     </>
