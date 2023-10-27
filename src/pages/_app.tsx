@@ -7,7 +7,14 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <div
         id="popUpDiv"
-        style={{ display: "none", width: "100%", height: "100%" }}
+        style={{
+          display: "none",
+          width: "100%",
+          height: "100%",
+          overflow: "hidden",
+          paddingTop: "56.25%",
+          position: "relative",
+        }}
       ></div>
       <Component {...pageProps} />
       <Toaster />
