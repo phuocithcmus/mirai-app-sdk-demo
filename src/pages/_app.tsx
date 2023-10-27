@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <div className="container">
+      <div className="container" style={{ display: "none" }}>
         <div
           className="responsive-iframe"
           id="popUpDiv"
