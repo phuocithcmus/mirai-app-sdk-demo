@@ -14,7 +14,7 @@ class CustomWindow extends AbstractMiraiWindow {
 
       if (windowObjectReference) {
         windowObjectReference.document.write(
-          '<iframe height="450"  allowTransparency="true" frameborder="0" scrolling="yes" style="width:100%;" src="' +
+          '<iframe  allowTransparency="true" frameborder="0" scrolling="yes" style="width:100%;" src="' +
             test1 +
             '" type= "text/javascript"></iframe>'
         );
