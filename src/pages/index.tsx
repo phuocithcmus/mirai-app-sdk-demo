@@ -291,6 +291,7 @@ const Home = () => {
 
   return (
     <StyledEngineProvider injectFirst>
+      <iframe name="theFrame"></iframe>
       {openModalRequest && (
         <ProviderForm
           provider={provider}
