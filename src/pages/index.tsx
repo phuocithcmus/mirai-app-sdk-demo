@@ -291,10 +291,6 @@ const Home = () => {
 
   return (
     <StyledEngineProvider injectFirst>
-      <div
-        id="popUpDiv"
-        style={{ display: "none", width: "100%", height: "100%" }}
-      ></div>
       {openModalRequest && (
         <ProviderForm
           provider={provider}
