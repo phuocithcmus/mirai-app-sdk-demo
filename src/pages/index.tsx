@@ -291,7 +291,7 @@ const Home = () => {
 
   return (
     <StyledEngineProvider injectFirst>
-      <iframe name="theFrame"></iframe>
+      <div id="popUpDiv" style={{ display: "none" }}></div>
       {openModalRequest && (
         <ProviderForm
           provider={provider}

@@ -5,14 +5,22 @@ export const SIGN_BASE_URL = "http://mirai-app-sdk-demo.vercel.app";
 class CustomWindow extends AbstractMiraiWindow {
   private currentWindow: Window | null = null;
   open({ uri }: { uri: string }): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const windowObjectReference = window.open(
-        `https://id-dev-v2.mirailabs.co/sign?w=${encodeURIComponent(
-          uri
-        )}&r=${encodeURIComponent(`https://mirai-app-sdk-demo.vercel.app/`)}`
-      );
+    let test1 = `https://id-dev-v2.mirailabs.co/sign?w=${encodeURIComponent(
+      uri
+    )}&r=${encodeURIComponent(`https://mirai-app-sdk-demo.vercel.app/`)}`;
 
-      this.currentWindow = windowObjectReference;
+    return new Promise((resolve, reject) => {
+      const windowObjectReference = window.open("popUpDiv");
+
+      if (windowObjectReference) {
+        windowObjectReference.document.write(
+          '<iframe height="450"  allowTransparency="true" frameborder="0" scrolling="yes" style="width:100%;" src="' +
+            test1 +
+            '" type= "text/javascript"></iframe>'
+        );
+
+        this.currentWindow = windowObjectReference;
+      }
     });
   }
   close(): Promise<void> {
