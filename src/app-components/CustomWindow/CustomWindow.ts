@@ -10,10 +10,12 @@ class CustomWindow extends AbstractMiraiWindow {
     )}&r=${encodeURIComponent(`https://mirai-app-sdk-demo.vercel.app/`)}`;
 
     return new Promise((resolve, reject) => {
+      let width = window.innerWidth;
+      let height = window.innerHeight;
       const windowObjectReference = window.open(
         "",
         "popUpDiv",
-        "fullscreen=yes,resizable=yes,width=320,height=720"
+        `fullscreen=yes,resizable=yes,width=${width},height=${height}`
       );
 
       if (windowObjectReference) {
