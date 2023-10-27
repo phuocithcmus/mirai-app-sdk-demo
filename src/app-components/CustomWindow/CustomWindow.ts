@@ -6,24 +6,19 @@ class CustomWindow extends AbstractMiraiWindow {
   private currentWindow: Window | null = null;
   open({ uri }: { uri: string }): Promise<void> {
     return new Promise((resolve, reject) => {
-      // const windowObjectReference = window.open(
-      //   `https://id-dev-v2.mirailabs.co/sign?w=${encodeURIComponent(
-      //     uri
-      //   )}&r=${encodeURIComponent(`https://mirai-app-sdk-demo.vercel.app/`)}`
-      // );
-      window.open(
+      const windowObjectReference = window.open(
         `https://id-dev-v2.mirailabs.co/sign?w=${encodeURIComponent(
           uri
-        )}&r=${encodeURIComponent(`https://mirai-app-sdk-demo.vercel.app/`)}`,
-        "theFrame"
+        )}&r=${encodeURIComponent(`https://mirai-app-sdk-demo.vercel.app/`)}`
       );
 
-      // this.currentWindow = windowObjectReference;
+      this.currentWindow = windowObjectReference;
     });
   }
   close(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.currentWindow) {
+        alert("Closing window");
         this.currentWindow?.close();
       }
     });
