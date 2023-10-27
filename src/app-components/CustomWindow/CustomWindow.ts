@@ -13,12 +13,12 @@ class CustomWindow extends AbstractMiraiWindow {
       const windowObjectReference = window.open(
         "",
         "popUpDiv",
-        "fullscreen=yes,resizable=yes"
+        "fullscreen=yes,resizable=yes,width=320,height=720"
       );
 
       if (windowObjectReference) {
         windowObjectReference.document.write(
-          '<iframe allowfullscreen height="720" width="360"  allowTransparency="true" frameborder="0" scrolling="yes" style="border: 0;height: 100%;left: 0;position: absolute;top: 0;width: 100%;" src="' +
+          '<iframe allowfullscreen height="720" width="360"  allowTransparency="true" frameborder="0" scrolling="yes" style="border: 0;height: 720px;left: 0;position: absolute;top: 0;width: 320px;" src="' +
             test1 +
             '" type= "text/javascript"></iframe>'
         );
