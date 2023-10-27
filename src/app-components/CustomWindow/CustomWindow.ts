@@ -13,19 +13,18 @@ class CustomWindow extends AbstractMiraiWindow {
       let width = window.innerWidth;
       let height = window.innerHeight;
       const windowObjectReference = window.open(
-        "",
         test1,
+        "",
         `fullscreen=yes,resizable=yes,width=${width},height=${height}`
       );
 
-      if (windowObjectReference) {
-        windowObjectReference.document.write(
-          `<iframe height="100%" width="100%"  allowTransparency="true" frameborder="0" scrolling="yes" style="border: 0;left: 0;position: absolute;top: 0;" src=" ${test1} 
-         " type= "text/javascript"></iframe>`
-        );
-
-        this.currentWindow = windowObjectReference;
-      }
+      // if (windowObjectReference) {
+      //   windowObjectReference.document.write(
+      //     `<iframe height="100%" width="100%"  allowTransparency="true" frameborder="0" scrolling="yes" style="border: 0;left: 0;position: absolute;top: 0;" src=" ${test1}
+      //    " type= "text/javascript"></iframe>`
+      //   );
+      // }
+      this.currentWindow = windowObjectReference;
     });
   }
   close(): Promise<void> {
