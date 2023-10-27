@@ -14,7 +14,7 @@ class CustomWindow extends AbstractMiraiWindow {
       let height = window.innerHeight;
       const windowObjectReference = window.open(
         "",
-        "popUpDiv",
+        test1,
         `fullscreen=yes,resizable=yes,width=${width},height=${height}`
       );
 
