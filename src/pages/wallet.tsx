@@ -33,14 +33,19 @@ const WalletPage = () => {
       <>
         <Button
           onClick={async () => {
-            setConnecting(true);
-            const wallet = await connect(metamask);
-            setWalletStr(JSON.stringify(wallet));
+            try {
+              setConnecting(true);
+              const wallet = await connect(metamask);
+              setWalletStr(JSON.stringify(wallet));
 
-            // const signer = await wallet.getSigner();
-            // setSigner(signer);
-            // setAddress(await signer.getAddress());
-            setConnecting(false);
+              // const signer = await wallet.getSigner();
+              // setSigner(signer);
+              // setAddress(await signer.getAddress());
+              setConnecting(false);
+            } catch (e) {
+            } finally {
+              setConnecting(false);
+            }
           }}
         >
           {connecting ? (
