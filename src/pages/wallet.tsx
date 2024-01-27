@@ -20,6 +20,7 @@ const WalletPage = () => {
   const signer = useSigner();
   const address = useAddress();
   const [connecting, setConnecting] = useState<boolean>(false);
+  const [walletStr, setWalletStr] = useState<string>("");
 
   useEffect(() => {
     if (!metamask || !getInjectedMetamaskProvider()) {
@@ -34,6 +35,7 @@ const WalletPage = () => {
           onClick={async () => {
             setConnecting(true);
             const wallet = await connect(metamask);
+            setWalletStr(JSON.stringify(wallet));
 
             // const signer = await wallet.getSigner();
             // setSigner(signer);
@@ -41,7 +43,11 @@ const WalletPage = () => {
             setConnecting(false);
           }}
         >
-          Connect Metamask with hook
+          {connecting ? (
+            <span>connecting...</span>
+          ) : (
+            <span>Connect Metamask with hook</span>
+          )}
         </Button>
       </>
 
@@ -49,23 +55,14 @@ const WalletPage = () => {
         theme="dark"
         modalSize="compact"
         className="btn flex-grow-1"
-        btnTitle={
-          (
-            <>
-              {connecting ? (
-                <span>connecting...</span>
-              ) : (
-                <span>Connect Wallet default Thirdweb</span>
-              )}
-            </>
-          ) as any
-        }
+        btnTitle={(<span>Connect Wallet default Thirdweb</span>) as any}
       />
 
       {signer && address && (
         <div>
           <p>Connected to Metamask</p>
           <p>{address}</p>
+          <p>wallet: {walletStr}</p>
         </div>
       )}
     </>
