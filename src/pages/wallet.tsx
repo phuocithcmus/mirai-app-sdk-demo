@@ -1,13 +1,12 @@
 import { Button } from "@mui/material";
 import {
   SignerOrProvider,
+  ThirdwebProvider,
   metamaskWallet,
-  useAddAdmin,
-  useAddress,
   useConnect,
 } from "@thirdweb-dev/react";
-import { useEffect, useState } from "react";
 import { getInjectedMetamaskProvider } from "@thirdweb-dev/wallets";
+import { useEffect, useState } from "react";
 
 const metamask = metamaskWallet();
 
@@ -24,24 +23,26 @@ const WalletPage = () => {
 
   return (
     <>
-      <Button
-        onClick={async () => {
-          const wallet = await connect(metamask);
+      <>
+        <Button
+          onClick={async () => {
+            const wallet = await connect(metamask);
 
-          const signer = await wallet.getSigner();
-          setSigner(signer);
-          setAddress(await signer.getAddress());
-        }}
-      >
-        Connect Metamask
-      </Button>
+            const signer = await wallet.getSigner();
+            setSigner(signer);
+            setAddress(await signer.getAddress());
+          }}
+        >
+          Connect Metamask
+        </Button>
 
-      {signer && address && (
-        <div>
-          <p>Connected to Metamask</p>
-          <p>{address}</p>
-        </div>
-      )}
+        {signer && address && (
+          <div>
+            <p>Connected to Metamask</p>
+            <p>{address}</p>
+          </div>
+        )}
+      </>
     </>
   );
 };

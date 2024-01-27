@@ -17,7 +17,6 @@
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.3",
     "@mui/x-data-grid": "^6.12.1",
-    "@pegaxy/auth-sdk": "^3.8.5",
     "@popperjs/core": "^2.11.2",
     "@thirdweb-dev/react": "^4.4.0",
     "@types/node": "20.5.2",
