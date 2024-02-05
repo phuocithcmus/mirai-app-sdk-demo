@@ -139,21 +139,22 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
         ]}
         clientId={process.env.NEXT_PUBLIC_THIRD_WEB_CLIENT_ID}
       >
-        <RootComponent>
-          <Component {...pageProps} />
-          <ToastContainer
-            position="bottom-right"
-            autoClose={3000}
-            hideProgressBar={true}
-            newestOnTop
-            closeOnClick={false}
-            rtl={false}
-            pauseOnFocusLoss={false}
-            draggable={false}
-            pauseOnHover={false}
-          />
+        <AppContextProvider>
+          <RootComponent>
+            <Component {...pageProps} />
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={true}
+              newestOnTop
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss={false}
+              draggable={false}
+              pauseOnHover={false}
+            />
 
-          {/* <ConnectWallet
+            {/* <ConnectWallet
 								style={{
 									display: 'none',
 								}}
@@ -162,7 +163,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
 								className="btn flex-grow-1"
 							/> */}
 
-          {/* <ConfigContext.Consumer>
+            {/* <ConfigContext.Consumer>
 								{(value) => {
 									if (!value?.is_show_alert) {
 										return null;
@@ -177,7 +178,8 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
 									);
 								}}
 							</ConfigContext.Consumer> */}
-        </RootComponent>
+          </RootComponent>
+        </AppContextProvider>
       </ThirdwebProvider>
     </>
   );
