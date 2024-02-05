@@ -1,3 +1,4 @@
+
 {
   "name": "mirai-app-sdk-demo",
   "version": "0.1.0",
@@ -94,7 +95,10 @@
     "uuidv4": "^6.2.13",
     "wnumb": "^1.2.0",
     "xregexp": "^5.1.0",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "@mui/lab": "^5.0.0-alpha.70",
+    "@mui/material": "^5.4.3",
+    "@mui/x-data-grid": "^6.12.1"
 },
 "devDependencies": {
     "@babel/register": "^7.17.7",
@@ -132,3 +136,4 @@
     "@types/react-dom": "18"
 }
 }
+
