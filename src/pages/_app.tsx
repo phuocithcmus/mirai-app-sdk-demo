@@ -1,3 +1,4 @@
+import { AppContextProvider } from "@/context";
 import { WalletName } from "@pegaxy/auth-sdk";
 import { Mumbai, Polygon } from "@thirdweb-dev/chains";
 import {
