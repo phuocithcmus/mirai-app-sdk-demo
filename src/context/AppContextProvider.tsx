@@ -3,7 +3,6 @@ import { MeasurementContextProvider } from "./MeasurementContext";
 import { SwapContextProvider } from "./SwapContext";
 import React from "react";
 import { AppAccountVersionContextProvider } from "./AppAccountVersionContext";
-import { ConfigContextProvider } from "./ConfigContext";
 import { FeatureToggleContextProvider } from "./FeatureToggleContext";
 
 export const combineComponents = (
@@ -33,7 +32,6 @@ const providers = [
   ConnectWalletContextProvider,
   MeasurementContextProvider,
   SwapContextProvider,
-  ConfigContextProvider,
   AppAccountVersionContextProvider,
 ];
 
