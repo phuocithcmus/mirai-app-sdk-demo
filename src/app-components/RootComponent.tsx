@@ -29,10 +29,10 @@ const RootComponent: React.FC<IRootComponent> = ({ children }) => {
   const connect = useConnect();
 
   useEffect(() => {
-    if (!metamask || !getInjectedMetamaskProvider()) {
+    if (!getInjectedMetamaskProvider()) {
       alert("Metamask is not installed");
     }
-  }, [metamask]);
+  }, []);
 
   // useEffect(() => {
   // 	const newwindow = window.open('https://google.com', '_blank');
