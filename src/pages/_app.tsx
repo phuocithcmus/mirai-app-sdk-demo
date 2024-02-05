@@ -1,5 +1,5 @@
-import "@/styles/globals.css";
-import { Mumbai } from "@thirdweb-dev/chains";
+import { WalletName } from "@pegaxy/auth-sdk";
+import { Mumbai, Polygon } from "@thirdweb-dev/chains";
 import {
   ThirdwebProvider,
   coinbaseWallet,
@@ -7,17 +7,114 @@ import {
   walletConnect,
 } from "@thirdweb-dev/react";
 import type { AppProps } from "next/app";
-import { Toaster } from "react-hot-toast";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import { Router, useRouter } from "next/router";
+import Script from "next/script";
+import NProgress from "nprogress";
+import React, { useEffect } from "react";
+import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.scss";
+import "react-loading-skeleton/dist/skeleton.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function App({ Component, pageProps }: AppProps) {
+const SUPPORTED_WALLETS = [
+  WalletName.WalletConnect,
+  WalletName.EIP1193,
+  WalletName.StandaloneEIP1193,
+];
+
+Router.events.on("routeChangeStart", (url) => {
+  console.log(`Loading: ${url}`);
+  NProgress.start();
+});
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
+
+Router.events.on("beforeHistoryChange", (url) => {
+  if (window) {
+    (window as any).has_prev_path = !!(window as any).prev_path;
+    (window as any).prev_path = window.location.pathname;
+    (window as any).prev_query = window.location.search;
+  }
+});
+
+const RootComponent = dynamic(() => import("../app-components/RootComponent"), {
+  ssr: false,
+});
+
+// const getLibrary = (provider: any): Web3Provider => {
+// 	const library = new Web3Provider(provider);
+
+// 	library.pollingInterval = 12000;
+
+// 	return library;
+// };
+
+const MAINNET_CHAINS = [80001, 2195, 137, 2718];
+
+const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+  const router = useRouter();
+
+  const supportedChains =
+    process.env.NEXT_PUBLIC_MODE === "prod" ||
+    process.env.NEXT_PUBLIC_MODE === "test"
+      ? [Polygon]
+      : [Mumbai];
+
+  const handleRouteChange = (url: string) => {
+    if (window) {
+      (window as any).gtag("config", process.env.NEXT_PUBLIC_GA_ID, {
+        page_path: url,
+      });
+    }
+  };
+
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
+
+  if (router && router.asPath.includes("/contact")) {
+    return <Component {...pageProps} />;
+  }
+
   return (
     <>
+      <Head>
+        <title>Pegaxy</title>
+        <link rel="shortcut icon" href="/favicon.ico" />
+        {/* <script src="/nprogress.js"></script>
+				<link rel="stylesheet" href="/nprogress.css" /> */}
+      </Head>
+
+      <Script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+      />
+
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+				
+					gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+				`}
+      </Script>
       <ThirdwebProvider
         // autoSwitch
         autoConnect
         autoConnectTimeout={20000}
-        activeChain={Mumbai}
-        supportedChains={[Mumbai]}
+        activeChain={
+          process.env.NEXT_PUBLIC_MODE === "prod" ||
+          process.env.NEXT_PUBLIC_MODE === "test"
+            ? Polygon
+            : Mumbai
+        }
+        supportedChains={supportedChains}
         dAppMeta={{
           name: "Pegaxy: Rush Races",
           description:
@@ -40,26 +137,50 @@ export default function App({ Component, pageProps }: AppProps) {
             recommended: true,
           }),
         ]}
-        clientId="eddbcef9681fa92d58d5c20bc19f8129"
+        clientId={process.env.NEXT_PUBLIC_THIRD_WEB_CLIENT_ID}
       >
-        {" "}
-        <div className="container" style={{ display: "none" }}>
-          <div
-            className="responsive-iframe"
-            id="popUpDiv"
-            style={{
-              display: "none",
-              width: "100%",
-              height: "100%",
-              overflow: "hidden",
-              paddingTop: "56.25%",
-              position: "relative",
-            }}
-          ></div>
-        </div>
-        <Component {...pageProps} />
-        <Toaster />
+        <RootComponent>
+          <Component {...pageProps} />
+          <ToastContainer
+            position="bottom-right"
+            autoClose={3000}
+            hideProgressBar={true}
+            newestOnTop
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss={false}
+            draggable={false}
+            pauseOnHover={false}
+          />
+
+          {/* <ConnectWallet
+								style={{
+									display: 'none',
+								}}
+								theme="dark"
+								modalSize="compact"
+								className="btn flex-grow-1"
+							/> */}
+
+          {/* <ConfigContext.Consumer>
+								{(value) => {
+									if (!value?.is_show_alert) {
+										return null;
+									}
+									return (
+										<ModalAccountAlerts
+											show={value.is_show_alert}
+											onHide={() => {
+												value.showAlert(false);
+											}}
+										/>
+									);
+								}}
+							</ConfigContext.Consumer> */}
+        </RootComponent>
       </ThirdwebProvider>
     </>
   );
-}
+};
+
+export default MyApp;
