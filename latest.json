@@ -1,11 +1,11 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "notes": "Beta release with initial features.",
-  "pub_date": "2025-06-17T00:00:00Z",
+  "pub_date": "2025-06-17T17:51:00Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTMXlYVld0OGUzRHRLTGxjd0lmbEdYSjl5VUxjeHVVY1RlZklCQUNsLzZyUGN2NUY3UWtDWkNWRzZUWTJlQmFqNjVPaTdmZGx4OXQ1M2Y5MVdSQTljWmZ4T3V1d1NTT0FvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzUwMTU2MDU2CWZpbGU6UmVtb3R5XzAuMS4wX3g2NC1zZXR1cC5leGUKRWRiNUFTSkVFR3c1d1drS09oTldTQ1JoSWFFUGNISUlIdm9oMCtLWEhDM0FNOEhxNCtxa0hmMzdZc1ppL0cwMXJ4ZXM1SEJVbnYwdGhyWUJnZUY0Qmc9PQo=",
-      "url": "https://cdn.remoty.xyz/release/Remoty_0.1.0_x64-setup.exe?time=1010123123"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTMXlYVld0OGUzRHBaQTRTbjM3Q0o0L2RxcDZBU3dFb3RTWjRaRHkxNzhmbGlWbjh0WndxejhiSkZiZWsyamxLdWVWaGlFVURaREc1c0FQTHE1Nm9ROEFrWFp0QnFSZUFZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzUwMTU3MzI3CWZpbGU6UmVtb3R5XzAuMS4wX3g2NC1zZXR1cC5leGUKU05ZTVc0bjNKeWtraGRkNlVXbFg3R0o5MjRLSndNb0QxckNxZ0hoMjZKcHRIOVNjbXdLb3ZFSGxBQUQrQWdNWFFGbWVBZ1J4aGFkckp1akI0V01IQ3c9PQo=",
+      "url": "https://cdn.remoty.xyz/release/Remoty_0.1.0_x64-setup.exe?time=3466575686789"
     }
   }
 }
