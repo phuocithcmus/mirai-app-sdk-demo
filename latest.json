@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0",
+  "notes": "Beta release with initial features.",
+  "pub_date": "2025-06-17T00:00:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTMXlYVld0OGUzRHV0VnUvYkR5U0VHaHFLWTNXbTlKY2wxWXd3Tkx3NXo5MXhFYTlqOXVhZW14cXFxR3hCcmRPTE53SFVMM2ZnZUFrTW5SN08rTEoxQkd5L09GS0RXRHdvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzUwMTUyMzM0CWZpbGU6UmVtb3R5XzAuMS4wX3g2NC1zZXR1cC5leGUKc1lXUmpYMDRNeitLN1M3QmNuL25wVlk2WTVQbmZuRDRGZmZHekJITXI5VGM3cm9zOEJpbGM3KzJZbXhPeGw0NGE1L0xjV0h6ZlVUZWRRS0xYTXJ2QkE9PQo=",
+      "url": "https://cdn.remoty.xyz/release/Remoty_0.1.0_x64-setup.exe"
+    }
+  }
+}
